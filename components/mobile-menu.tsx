@@ -1,18 +1,21 @@
 "use client"
 
-import { Menu, X } from "lucide-react"
+import { Menu, X, ChevronRight } from "lucide-react"
 import { useState } from "react"
-import { ResourcesDropdown } from "./resources-dropdown"
 
 export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false)
+  const [showMundoSomma, setShowMundoSomma] = useState(false)
 
-  const closeMenu = () => setIsOpen(false)
+  const closeMenu = () => {
+    setIsOpen(false)
+    setShowMundoSomma(false)
+  }
 
   return (
     <div className="relative">
       <button
-        className="p-2 text-white hover:text-[#ff4f2d] transition-colors duration-300"
+        className="p-1.5 sm:p-2 text-white hover:text-[#ff4f2d] transition-colors duration-300"
         aria-label="Menu"
         aria-expanded={isOpen}
         onClick={() => setIsOpen(!isOpen)}
@@ -22,37 +25,75 @@ export function MobileMenu() {
 
       {isOpen && (
         <>
-          <div className="fixed inset-0 bg-black/30 z-40 md:hidden" onClick={closeMenu} aria-hidden="true" />
+          {/* Backdrop */}
+          <div className="fixed inset-0 bg-black/50 z-40 md:hidden" onClick={closeMenu} aria-hidden="true" />
 
-          <div className="absolute right-0 top-full mt-2 bg-black/90 border border-zinc-800 rounded-lg w-48 shadow-lg z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-            {/* Menu content */}
-            <div className="flex flex-col divide-y divide-zinc-800">
-              {/* Mundo Somma link */}
-              <div className="px-4 py-3">
-                <ResourcesDropdown />
-              </div>
+          {/* Menu panel */}
+          <div className="absolute right-0 top-full mt-2 bg-zinc-950/95 backdrop-blur-xl border border-zinc-800 rounded-xl w-56 shadow-2xl z-50 animate-in fade-in slide-in-from-top-2 duration-200 overflow-hidden">
+            <div className="py-2">
+              {/* Mundo Somma */}
+              <button
+                onClick={() => setShowMundoSomma(!showMundoSomma)}
+                className="w-full px-4 py-3 text-sm text-white hover:bg-zinc-900/50 transition-colors flex items-center justify-between"
+              >
+                <span>Mundo Somma</span>
+                <ChevronRight
+                  className={`w-4 h-4 text-zinc-500 transition-transform duration-200 ${showMundoSomma ? "rotate-90" : ""}`}
+                />
+              </button>
 
-              {/* Contact link */}
+              {showMundoSomma && (
+                <div className="bg-zinc-900/30 border-t border-zinc-800">
+                  <a
+                    href="https://sommaclub.com.br/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block px-6 py-2.5 text-sm text-zinc-400 hover:text-[#ff4f2d] transition-colors"
+                    onClick={closeMenu}
+                  >
+                    Site
+                  </a>
+                  <a
+                    href="https://loja.sommaclub.com.br/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block px-6 py-2.5 text-sm text-zinc-400 hover:text-[#ff4f2d] transition-colors"
+                    onClick={closeMenu}
+                  >
+                    Loja Somma
+                  </a>
+                </div>
+              )}
+
+              {/* Divider */}
+              <div className="h-px bg-zinc-800 my-2" />
+
+              {/* Contato */}
               <a
                 href="https://wa.me/5561991780334?text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20o%20clube%20de%20membros%20do%20Somma."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 py-3 text-sm text-white hover:text-[#ff4f2d] transition-colors duration-300"
+                className="block px-4 py-3 text-sm text-white hover:bg-zinc-900/50 transition-colors"
                 onClick={closeMenu}
               >
                 Contato
               </a>
 
-              {/* CTA Button */}
-              <button
-                onClick={() => {
-                  document.getElementById("subscription-form")?.scrollIntoView({ behavior: "smooth" })
-                  closeMenu()
-                }}
-                className="px-4 py-3 text-sm font-semibold text-white bg-[#ff4f2d] hover:bg-[#ff5e3f] transition-colors duration-300"
-              >
-                Inscreva-se
-              </button>
+              {/* Divider */}
+              <div className="h-px bg-zinc-800 my-2" />
+
+              {/* CTA */}
+              <div className="px-3 pb-2">
+                <button
+                  onClick={() => {
+                    document.getElementById("capabilities")?.scrollIntoView({ behavior: "smooth" })
+                    closeMenu()
+                  }}
+                  className="w-full py-2.5 text-sm font-medium text-white bg-[#ff4f2d] hover:bg-[#ff5e3f] rounded-lg transition-colors"
+                >
+                  Inscreva-se
+                </button>
+              </div>
             </div>
           </div>
         </>

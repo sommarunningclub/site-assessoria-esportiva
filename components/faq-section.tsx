@@ -40,17 +40,19 @@ export function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   return (
-    <section className="relative z-20 py-24">
-      <div className="container mx-auto px-6 lg:px-12">
+    <section className="relative z-20 py-12 sm:py-16 md:py-24">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-12">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-light mb-6 text-balance">Perguntas Frequentes</h2>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light mb-4 sm:mb-6 text-balance">
+            Perguntas Frequentes
+          </h2>
 
-          <p className="text-lg md:text-xl text-zinc-400 mb-16">
+          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-zinc-400 mb-8 sm:mb-12 md:mb-16 leading-relaxed">
             Tire suas dúvidas sobre o SOMMA Club e entenda como funciona a experiência de ser membro da nossa
             comunidade.
           </p>
 
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {faqs.map((faq, index) => (
               <div
                 key={index}
@@ -58,19 +60,23 @@ export function FAQSection() {
               >
                 <button
                   onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                  className="w-full px-6 py-5 md:py-6 flex items-start justify-between gap-4 hover:bg-zinc-950/50 transition-colors text-left"
+                  className="w-full px-4 sm:px-6 py-4 sm:py-5 md:py-6 flex items-start justify-between gap-3 sm:gap-4 hover:bg-zinc-950/50 transition-colors text-left"
                 >
-                  <span className="text-base md:text-lg font-light text-white text-balance pr-4">{faq.question}</span>
+                  <span className="text-sm sm:text-base md:text-lg font-light text-white text-balance pr-2 sm:pr-4">
+                    {faq.question}
+                  </span>
                   <ChevronDown
-                    className={`w-5 h-5 text-[#ff4f2d] flex-shrink-0 transition-transform duration-300 ${
+                    className={`w-4 h-4 sm:w-5 sm:h-5 text-[#ff4f2d] flex-shrink-0 transition-transform duration-300 mt-0.5 sm:mt-1 ${
                       openIndex === index ? "rotate-180" : ""
                     }`}
                   />
                 </button>
 
                 {openIndex === index && (
-                  <div className="px-6 pb-6 border-t border-zinc-800 bg-zinc-950/30">
-                    <p className="text-zinc-300 text-base md:text-lg font-light leading-relaxed">{faq.answer}</p>
+                  <div className="px-4 sm:px-6 pb-4 sm:pb-6 border-t border-zinc-800 bg-zinc-950/30">
+                    <p className="text-zinc-300 text-sm sm:text-base md:text-lg font-light leading-relaxed pt-4">
+                      {faq.answer}
+                    </p>
                   </div>
                 )}
               </div>

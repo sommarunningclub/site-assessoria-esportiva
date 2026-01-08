@@ -28,14 +28,20 @@ export function Navbar() {
 
   return (
     <nav
-      className={`fixed left-1/2 -translate-x-1/2 z-50 px-3 sm:px-6 w-full max-w-7xl transition-all duration-700 ease-in-out ${
-        isVisible ? "top-4 sm:top-8 opacity-100" : "-top-24 opacity-0"
+      className={`fixed left-1/2 -translate-x-1/2 z-50 px-3 sm:px-4 md:px-6 w-full max-w-7xl transition-all duration-700 ease-in-out ${
+        isVisible ? "top-3 sm:top-4 md:top-8 opacity-100" : "-top-24 opacity-0"
       }`}
     >
-      <div className="bg-black/50 backdrop-blur-[120px] rounded-full px-4 sm:px-8 py-2 sm:py-3 flex items-center gap-4 sm:gap-8 shadow-lg border border-white/10 w-full">
-        {/* Logo */}
+      <div className="bg-black/50 backdrop-blur-[120px] rounded-full px-3 sm:px-4 md:px-8 py-2 sm:py-2.5 md:py-3 flex items-center gap-3 sm:gap-4 md:gap-8 shadow-lg border border-white/10 w-full">
+        {/* Logo - smaller on mobile */}
         <div className="flex items-center flex-shrink-0">
-          <Image src="/webrenew-brandmark.png" alt="webrenew" width={225} height={48} className="h-8 sm:h-12 w-auto" />
+          <Image
+            src="/webrenew-brandmark.png"
+            alt="SOMMA Club"
+            width={225}
+            height={48}
+            className="h-6 sm:h-8 md:h-10 lg:h-12 w-auto"
+          />
         </div>
 
         {/* Desktop Menu Links */}
@@ -45,14 +51,14 @@ export function Navbar() {
             href="https://wa.me/5561991780334?text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20o%20clube%20de%20membros%20do%20Somma."
             target="_blank"
             rel="noopener noreferrer"
-            className="px-4 sm:px-[18px] py-2 sm:py-[10px] rounded-full border border-[#ff4f2d] bg-[#ff4f2d]/50 text-white font-medium text-sm hover:scale-105 transition-transform duration-500"
+            className="px-3 sm:px-4 md:px-[18px] py-1.5 sm:py-2 md:py-[10px] rounded-full border border-[#ff4f2d] bg-[#ff4f2d]/50 text-white font-medium text-xs sm:text-sm hover:scale-105 transition-transform duration-500"
           >
             Contato
           </a>
         </div>
 
         {/* Mobile Menu */}
-        <div className="flex md:hidden items-center justify-end flex-1 pr-2 sm:pr-4">
+        <div className="flex md:hidden items-center justify-end flex-1">
           <MobileMenu />
         </div>
       </div>
