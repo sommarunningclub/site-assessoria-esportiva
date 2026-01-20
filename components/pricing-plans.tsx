@@ -9,7 +9,7 @@ const benefits = [
   { name: "Presença VIP nas provas Somma", membership: true, assessoria: true },
   { name: "Estrutura Somma em eventos", membership: true, assessoria: true },
   { name: "Descontos em parceiros Somma", membership: true, assessoria: true },
-  { name: "Track and Field", membership: true, assessoria: true },
+  { name: "Track&Field", membership: true, assessoria: true },
   { name: "Tex Barbearia", membership: true, assessoria: true },
   {
     name: "Dopahmina",
@@ -46,7 +46,7 @@ export function PricingPlans() {
   } | null>(null)
 
   const membershipPrices = {
-    mensal: { price: 80, total: 80, savings: null },
+    mensal: { price: 5, total: 5, savings: null },
     semestral: { price: 59.9, total: 359.4, savings: "R$ 120,60 de economia" },
     anual: { price: 49.9, total: 598.8, savings: "R$ 361,20 de economia" },
   }

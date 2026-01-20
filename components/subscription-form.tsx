@@ -45,6 +45,7 @@ const CITIES = [
   "Pirenópolis",
   "Anápolis",
   "Goiânia",
+  "Outra Cidade",
 ]
 
 const formatWhatsApp = (value: string): string => {

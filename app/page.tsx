@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
-import { CircleArrowRight, Lock } from "lucide-react"
+import { CircleArrowRight } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Navbar } from "@/components/navbar"
 import Script from "next/script"
@@ -288,85 +288,203 @@ export default function Home() {
 
       {/* SOMMA Club Benefits Section */}
       <section className="relative z-20 py-12 sm:py-16 md:py-24">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-12">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light mb-6 sm:mb-8 text-balance">
-              Vantagens de ser Membro
-            </h2>
+        <div className="container p-4 sm:p-6 md:p-8 lg:p-12 rounded-xl sm:rounded-2xl z-50 bg-[#09090b] border border-zinc-800 mx-auto">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light text-white mb-4 sm:mb-6">
+            Vantagens de ser Membro
+          </h2>
 
-            <div className="text-sm sm:text-base md:text-lg lg:text-xl text-zinc-400 mb-6 sm:mb-8 md:mb-12 leading-relaxed space-y-4 sm:space-y-6">
-              <p>
-                Ao se tornar membro do SOMMA Club, você terá acesso a um universo de benefícios pensados para
-                potencializar sua experiência como corredor e membro da nossa comunidade.
-              </p>
+          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-zinc-400 mb-6 sm:mb-8 md:mb-12 leading-relaxed">
+            Ao se tornar membro do SOMMA Club, você terá acesso a um universo de benefícios pensados para potencializar
+            sua experiência como corredor e membro da nossa comunidade.
+          </p>
 
-              <p>
-                Presença VIP nas provas Somma: Acesso privilegiado e exclusivo em todas as provas organizadas pelo
-                SOMMA.
-              </p>
-              <p>Estrutura Somma em eventos: Apoio completo da equipe SOMMA durante eventos e competições.</p>
-              <p>
-                Descontos em parceiros: Vantagens exclusivas em Track and Field, Tex Barbearia, Dopahmina, Academia
-                Evolve, Bugu Delicias e marcas de suplementos.
-              </p>
-              <p>Sorteios mensais: Participe de sorteios exclusivos todos os meses com prêmios especiais.</p>
-              <p>
-                Encontros mensais exclusivos: Eventos especiais para membros com corridas temáticas, palestras e
-                experiências únicas.
-              </p>
-              <p>
-                Treinamento personalizado via app: Plano de treino personalizado com integração Strava/relógios GPS e
-                acompanhamento de métricas (exclusivo Assessoria).
-              </p>
-              <p>Camiseta oficial de membro: Camiseta exclusiva do SOMMA Club nos planos semestral e anual.</p>
-              <p>Desconto em camisetas extras: 50% de desconto para membros do Membership em camisetas adicionais.</p>
-            </div>
+          <div className="block lg:hidden space-y-3">
+            {[
+              {
+                title: "Presença VIP nas provas Somma",
+                desc: "Acesso privilegiado e exclusivo em todas as provas organizadas pelo SOMMA",
+              },
+              {
+                title: "Estrutura Somma em eventos",
+                desc: "Apoio completo da equipe SOMMA durante eventos e competições",
+              },
+              {
+                title: "Descontos em parceiros",
+                desc: "Vantagens exclusivas em Track&Field, Tex Barbearia, Dopahmina, Academia Evolve, Bugu Delicias e marcas de suplementos",
+              },
+              {
+                title: "Sorteios mensais",
+                desc: "Participe de sorteios exclusivos todos os meses com prêmios especiais",
+              },
+              {
+                title: "Encontros mensais exclusivos",
+                desc: "Eventos especiais para membros com corridas temáticas, palestras e experiências únicas",
+              },
+              {
+                title: "Treinamento personalizado via app",
+                desc: "Plano de treino personalizado com integração Strava/relógios GPS e acompanhamento de métricas (exclusivo Assessoria)",
+              },
+              {
+                title: "Camiseta oficial de membro",
+                desc: "Camiseta exclusiva do SOMMA Club nos planos semestral e anual",
+              },
+              {
+                title: "Desconto em camisetas extras",
+                desc: "50% de desconto para membros do Membership em camisetas adicionais",
+              },
+            ].map((item, index) => (
+              <div
+                key={index}
+                className="p-4 bg-zinc-950/50 border border-zinc-800 rounded-lg hover:border-zinc-700 transition-colors"
+              >
+                <h3 className="font-medium text-white text-sm mb-2">{item.title}</h3>
+                <p className="text-zinc-400 text-xs leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="hidden lg:block overflow-x-auto rounded-xl border border-zinc-800">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-zinc-800 bg-zinc-950/50">
+                  <th className="text-left px-6 py-4 font-light text-white text-lg">Benefício</th>
+                  <th className="text-left px-6 py-4 font-light text-white text-lg">O que você ganha</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-zinc-800">
+                <tr className="hover:bg-zinc-950/50 transition-colors">
+                  <td className="px-6 py-6">
+                    <span className="font-light text-white text-base">Presença VIP nas provas Somma</span>
+                  </td>
+                  <td className="px-6 py-6">
+                    <span className="text-zinc-300">
+                      Acesso privilegiado e exclusivo em todas as provas organizadas pelo SOMMA
+                    </span>
+                  </td>
+                </tr>
+                <tr className="hover:bg-zinc-950/50 transition-colors">
+                  <td className="px-6 py-6">
+                    <span className="font-light text-white text-base">Estrutura Somma em eventos</span>
+                  </td>
+                  <td className="px-6 py-6">
+                    <span className="text-zinc-300">Apoio completo da equipe SOMMA durante eventos e competições</span>
+                  </td>
+                </tr>
+                <tr className="hover:bg-zinc-950/50 transition-colors">
+                  <td className="px-6 py-6">
+                    <span className="font-light text-white text-base">Descontos em parceiros</span>
+                  </td>
+                  <td className="px-6 py-6">
+                    <span className="text-zinc-300">
+                      Track&Field, Tex Barbearia, Dopahmina, Academia Evolve, Bugu Delicias e marcas de suplementos
+                    </span>
+                  </td>
+                </tr>
+                <tr className="hover:bg-zinc-950/50 transition-colors">
+                  <td className="px-6 py-6">
+                    <span className="font-light text-white text-base">Sorteios mensais</span>
+                  </td>
+                  <td className="px-6 py-6">
+                    <span className="text-zinc-300">
+                      Participe de sorteios exclusivos todos os meses com prêmios especiais para membros
+                    </span>
+                  </td>
+                </tr>
+                <tr className="hover:bg-zinc-950/50 transition-colors">
+                  <td className="px-6 py-6">
+                    <span className="font-light text-white text-base">Encontros mensais exclusivos</span>
+                  </td>
+                  <td className="px-6 py-6">
+                    <span className="text-zinc-300">
+                      Eventos especiais para membros com corridas temáticas, palestras e experiências únicas
+                    </span>
+                  </td>
+                </tr>
+                <tr className="hover:bg-zinc-950/50 transition-colors">
+                  <td className="px-6 py-6">
+                    <span className="font-light text-white text-base">Treinamento personalizado via app</span>
+                  </td>
+                  <td className="px-6 py-6">
+                    <span className="text-zinc-300">
+                      Plano de treino personalizado com integração Strava/relógios GPS e acompanhamento de métricas
+                      (exclusivo Assessoria)
+                    </span>
+                  </td>
+                </tr>
+                <tr className="hover:bg-zinc-950/50 transition-colors">
+                  <td className="px-6 py-6">
+                    <span className="font-light text-white text-base">Camiseta oficial de membro</span>
+                  </td>
+                  <td className="px-6 py-6">
+                    <span className="text-zinc-300">Camiseta exclusiva do SOMMA Club nos planos semestral e anual</span>
+                  </td>
+                </tr>
+                <tr className="hover:bg-zinc-950/50 transition-colors">
+                  <td className="px-6 py-6">
+                    <span className="font-light text-white text-base">Desconto em camisetas extras</span>
+                  </td>
+                  <td className="px-6 py-6">
+                    <span className="text-zinc-300">
+                      50% de desconto para membros do Membership em camisetas adicionais
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
 
       {/* SOMMA Club Pricing Section */}
       <section className="relative z-20 py-12 sm:py-16 md:py-20 lg:py-24">
-        <div className="container p-4 sm:p-6 md:p-8 lg:p-12 rounded-xl sm:rounded-2xl z-50 bg-[#09090b] border border-zinc-800 mx-auto">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light mb-3 sm:mb-4 md:mb-6 text-balance">
-            Planos de Assinatura
-          </h2>
-
-          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-zinc-400 mb-6 sm:mb-8 md:mb-12 leading-relaxed">
-            O SOMMA Club oferece opções flexíveis para você escolher o plano que melhor se encaixa na sua rotina e
-            objetivos.
-          </p>
-
-          <div className="relative">
-            {/* Blur overlay */}
-            <div className="absolute inset-0 z-10 backdrop-blur-md bg-black/60 rounded-xl flex flex-col items-center justify-center">
-              <div className="bg-zinc-900/80 border border-zinc-700 rounded-full p-4 sm:p-6 mb-4 sm:mb-6">
-                <Lock className="w-8 h-8 sm:w-12 sm:h-12 text-[#ff4f2d]" />
-              </div>
-              <h3 className="text-lg sm:text-xl md:text-2xl font-light text-white mb-2 text-center px-4">
-                Em breve disponível
-              </h3>
-              <p className="text-xs sm:text-sm text-zinc-400 text-center px-4 max-w-md">
-                Os planos de assinatura serão liberados em breve. Entre na lista VIP para ser notificado.
-              </p>
-              <Button
-                onClick={scrollToCapabilities}
-                className="mt-4 sm:mt-6 bg-[#ff4f2d] hover:bg-[#ff6647] text-white px-6 py-2 rounded-full text-sm"
+        <div className="container p-4 sm:p-6 md:p-8 lg:p-12 rounded-xl sm:rounded-2xl z-50 bg-[#09090b] border border-zinc-800 mx-auto relative overflow-hidden">
+          {/* Blur Overlay with Lock */}
+          <div className="absolute inset-0 z-50 backdrop-blur-md bg-black/40 flex flex-col items-center justify-center">
+            {/* Lock Icon */}
+            <div className="relative mb-6">
+              <div className="absolute inset-0 bg-[#ff4f2d]/20 blur-2xl rounded-full animate-pulse" />
+              <svg
+                className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 text-[#ff4f2d] relative z-10"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={1.5}
               >
-                Entrar na Lista VIP
-              </Button>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
+                />
+              </svg>
             </div>
+            
+            {/* Text */}
+            <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light text-white mb-3 text-center px-4">
+              Planos em Breve
+            </h3>
+            <p className="text-sm sm:text-base text-zinc-300 text-center max-w-md px-4">
+              Entre na lista VIP para ter acesso antecipado quando os planos forem liberados
+            </p>
+          </div>
 
-            {/* Blurred content */}
-            <div className="filter blur-sm pointer-events-none select-none">
-              <PricingPlans />
-            </div>
+          {/* Original Content (blurred) */}
+          <div className="blur-sm pointer-events-none select-none">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light mb-3 sm:mb-4 md:mb-6 text-balance">
+              Planos de Assinatura
+            </h2>
+
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-zinc-400 mb-6 sm:mb-8 md:mb-12 leading-relaxed">
+              O SOMMA Club oferece opções flexíveis para você escolher o plano que melhor se encaixa na sua rotina e
+              objetivos.
+            </p>
+
+            <PricingPlans />
           </div>
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <FAQSection />
+      {/* FAQ Section - Hidden */}
+      {/* <FAQSection /> */}
     </main>
   )
 }

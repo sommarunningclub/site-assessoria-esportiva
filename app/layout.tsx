@@ -4,7 +4,9 @@ import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { LenisProvider } from "@/components/lenis-provider"
 import { Footer } from "@/components/footer"
-import { PasswordLock } from "@/components/password-lock"
+import { PasswordLock } from "@/components/password-lock" // Added import for PasswordLock
+
+import { CookieBanner } from "@/components/cookie-banner"
 import "./globals.css"
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" })
@@ -33,14 +35,13 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <body className={`${geist.variable} ${geistMono.variable} font-sans antialiased`}>
         <LenisProvider>
-          <PasswordLock>
-            {children}
-            <Footer />
-          </PasswordLock>
+          {children}
+          <Footer />
         </LenisProvider>
+        <CookieBanner />
         <Analytics />
       </body>
     </html>
