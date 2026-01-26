@@ -437,49 +437,17 @@ export default function Home() {
 
       {/* SOMMA Club Pricing Section */}
       <section className="relative z-20 py-12 sm:py-16 md:py-20 lg:py-24">
-        <div className="container p-4 sm:p-6 md:p-8 lg:p-12 rounded-xl sm:rounded-2xl z-50 bg-[#09090b] border border-zinc-800 mx-auto relative overflow-hidden">
-          {/* Blur Overlay with Lock */}
-          <div className="absolute inset-0 z-50 backdrop-blur-md bg-black/40 flex flex-col items-center justify-center">
-            {/* Lock Icon */}
-            <div className="relative mb-6">
-              <div className="absolute inset-0 bg-[#ff4f2d]/20 blur-2xl rounded-full animate-pulse" />
-              <svg
-                className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 text-[#ff4f2d] relative z-10"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={1.5}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
-                />
-              </svg>
-            </div>
-            
-            {/* Text */}
-            <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light text-white mb-3 text-center px-4">
-              Planos em Breve
-            </h3>
-            <p className="text-sm sm:text-base text-zinc-300 text-center max-w-md px-4">
-              Entre na lista VIP para ter acesso antecipado quando os planos forem liberados
-            </p>
-          </div>
+        <div className="container p-4 sm:p-6 md:p-8 lg:p-12 rounded-xl sm:rounded-2xl z-50 bg-[#09090b] border border-zinc-800 mx-auto">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light mb-3 sm:mb-4 md:mb-6 text-balance">
+            Planos de Assinatura
+          </h2>
 
-          {/* Original Content (blurred) */}
-          <div className="blur-sm pointer-events-none select-none">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light mb-3 sm:mb-4 md:mb-6 text-balance">
-              Planos de Assinatura
-            </h2>
+          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-zinc-400 mb-6 sm:mb-8 md:mb-12 leading-relaxed">
+            O SOMMA Club oferece opções flexíveis para você escolher o plano que melhor se encaixa na sua rotina e
+            objetivos.
+          </p>
 
-            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-zinc-400 mb-6 sm:mb-8 md:mb-12 leading-relaxed">
-              O SOMMA Club oferece opções flexíveis para você escolher o plano que melhor se encaixa na sua rotina e
-              objetivos.
-            </p>
-
-            <PricingPlans />
-          </div>
+          <PricingPlans />
         </div>
       </section>
 
