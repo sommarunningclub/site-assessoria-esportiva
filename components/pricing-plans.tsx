@@ -46,9 +46,9 @@ export function PricingPlans() {
   } | null>(null)
 
   const membershipPrices = {
-    mensal: { price: 5, total: 5, savings: null },
-    semestral: { price: 59.9, total: 359.4, savings: "R$ 120,60 de economia" },
-    anual: { price: 49.9, total: 598.8, savings: "R$ 361,20 de economia" },
+    mensal: { price: 150, total: 150, savings: null },
+    semestral: { price: 130, total: 780, savings: "R$ 180 de economia" },
+    anual: { price: 110, total: 1320, savings: "R$ 540 de economia" },
   }
 
   const assessoriaPrices = {
@@ -98,54 +98,12 @@ export function PricingPlans() {
   return (
     <div className="space-y-8 sm:space-y-12 md:space-y-16">
       {/* Plans Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
-        {/* Somma Membership Card */}
-        <div className="relative rounded-xl sm:rounded-2xl border border-zinc-800 bg-zinc-950/50 p-4 sm:p-6 md:p-8 hover:border-zinc-700 transition-colors">
-          <div className="mb-6 sm:mb-8">
-            <h3 className="text-xl sm:text-2xl md:text-3xl font-light text-white mb-1 sm:mb-2">Somma Membership</h3>
-            <p className="text-xs sm:text-sm md:text-base text-zinc-400">Acesso à comunidade e benefícios exclusivos</p>
-          </div>
-
-          {/* Period Selector */}
-          <div className="flex gap-1 sm:gap-2 mb-4 sm:mb-6 bg-zinc-900/50 p-1 rounded-lg">
-            {(["mensal", "semestral", "anual"] as const).map((period) => (
-              <button
-                key={period}
-                onClick={() => setMembershipPeriod(period)}
-                className={`flex-1 py-1.5 sm:py-2 px-2 sm:px-3 rounded text-[10px] sm:text-xs md:text-sm font-light transition-colors ${
-                  membershipPeriod === period ? "bg-[#ff4f2d] text-black" : "text-zinc-400 hover:text-white"
-                }`}
-              >
-                {period.charAt(0).toUpperCase() + period.slice(1)}
-              </button>
-            ))}
-          </div>
-
-          {/* Price Display */}
-          <div className="mb-6 sm:mb-8">
-            <div className="flex items-baseline gap-1 sm:gap-2">
-              <span className="text-3xl sm:text-4xl md:text-5xl font-light text-white">
-                R$ {membershipPrices[membershipPeriod].price.toFixed(2).replace(".", ",")}
-              </span>
-              <span className="text-zinc-400 text-sm sm:text-base">/mês</span>
-            </div>
-          </div>
-
-          <button
-            onClick={() =>
-              handleSubscribe("Somma Membership", membershipPeriod, membershipPrices[membershipPeriod].price)
-            }
-            className="w-full py-2.5 sm:py-3 md:py-4 px-4 rounded-lg border border-zinc-700 text-white font-light hover:bg-zinc-900 transition-colors text-sm sm:text-base"
-          >
-            Assinar Agora
-          </button>
-        </div>
-
+      <div className="grid grid-cols-1 gap-4 sm:gap-6 md:gap-8 max-w-2xl">
         {/* Somma Assessoria Card */}
-        <div className="relative rounded-xl sm:rounded-2xl border border-[#ff4f2d]/50 bg-zinc-950/50 p-4 sm:p-6 md:p-8 hover:border-[#ff4f2d] transition-colors mt-4 md:mt-0">
+        <div className="relative rounded-xl sm:rounded-2xl border border-[#ff4f2d]/50 bg-zinc-950/50 p-4 sm:p-6 md:p-8 hover:border-[#ff4f2d] transition-colors">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
             <span className="px-3 sm:px-4 py-0.5 sm:py-1 bg-[#ff4f2d] text-black text-[10px] sm:text-xs font-bold rounded-full whitespace-nowrap">
-              RECOMENDADO
+              PLANO PRINCIPAL
             </span>
           </div>
 
@@ -208,12 +166,6 @@ export function PricingPlans() {
                     scope="col"
                     className="px-3 sm:px-4 md:px-6 py-3 sm:py-4 text-center text-xs sm:text-sm md:text-base font-light text-white min-w-[100px] sm:min-w-[140px]"
                   >
-                    <span className="hidden sm:inline">Somma </span>Membership
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 sm:px-4 md:px-6 py-3 sm:py-4 text-center text-xs sm:text-sm md:text-base font-light text-white min-w-[100px] sm:min-w-[140px]"
-                  >
                     <span className="hidden sm:inline">Somma </span>Assessoria
                   </th>
                 </tr>
@@ -245,9 +197,6 @@ export function PricingPlans() {
                           />
                         )}
                       </div>
-                    </td>
-                    <td className="px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 md:py-4 text-center">
-                      {renderBenefitValue(benefit.membership)}
                     </td>
                     <td className="px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 md:py-4 text-center">
                       {renderBenefitValue(benefit.assessoria)}
