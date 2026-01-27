@@ -98,9 +98,9 @@ export function PricingPlans() {
   return (
     <div className="space-y-8 sm:space-y-12 md:space-y-16">
       {/* Plans Cards */}
-      <div className="grid grid-cols-1 gap-4 sm:gap-6 md:gap-8 max-w-2xl">
+      <div className="grid grid-cols-1 gap-4 sm:gap-6 md:gap-8 w-full">
         {/* Somma Assessoria Card */}
-        <div className="relative rounded-xl sm:rounded-2xl border border-[#ff4f2d]/50 bg-zinc-950/50 p-4 sm:p-6 md:p-8 hover:border-[#ff4f2d] transition-colors">
+        <div className="relative rounded-xl sm:rounded-2xl border border-[#ff4f2d]/50 bg-zinc-950/50 p-4 sm:p-6 md:p-8 hover:border-[#ff4f2d] transition-colors w-full">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
             <span className="px-3 sm:px-4 py-0.5 sm:py-1 bg-[#ff4f2d] text-black text-[10px] sm:text-xs font-bold rounded-full whitespace-nowrap">
               PLANO PRINCIPAL
