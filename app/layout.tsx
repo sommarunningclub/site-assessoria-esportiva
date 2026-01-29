@@ -13,18 +13,21 @@ const geist = Geist({ subsets: ["latin"], variable: "--font-geist" })
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" })
 
 export const metadata: Metadata = {
-  title: "Somma Running Club Membros",
+  title: "Member Somma Club",
   description: "Grupo Exclusivo de Membros para ajudar na sua performance.",
   generator: "Somma Running Club",
+  icons: {
+    icon: "https://cdn.shopify.com/s/files/1/0788/1932/8253/files/Favicon_Somma_club.svg?v=1769679872",
+  },
   openGraph: {
-    title: "Somma Running Club Membros",
+    title: "Member Somma Club",
     description: "Grupo Exclusivo de Membros para ajudar na sua performance.",
     type: "website",
     locale: "pt_BR",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Somma Running Club Membros",
+    title: "Member Somma Club",
     description: "Grupo Exclusivo de Membros para ajudar na sua performance.",
   },
 }
