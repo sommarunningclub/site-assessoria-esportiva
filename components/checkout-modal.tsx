@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState, useEffect } from "react"
-import { X, CreditCard, Loader2, Check, AlertCircle, Lock, MapPin, Tag, ChevronLeft, ShieldCheck } from "lucide-react"
+import { X, CreditCard, Loader2, Check, AlertCircle, Lock, MapPin, ChevronLeft, ShieldCheck } from "lucide-react"
 
 interface CheckoutModalProps {
   isOpen: boolean
@@ -36,14 +36,6 @@ interface CreditCardData {
   ccv: string
 }
 
-interface CouponData {
-  valid: boolean
-  code: string
-  discount: number
-  type: "PERCENTAGE" | "FIXED"
-  description: string
-}
-
 interface CepResponse {
   cep: string
   state: string
@@ -59,12 +51,6 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
   const [customerId, setCustomerId] = useState<string | null>(null)
   const [isCepLoading, setIsCepLoading] = useState(false)
   const [cepError, setCepError] = useState<string | null>(null)
-
-  // Coupon state
-  const [couponCode, setCouponCode] = useState("")
-  const [couponData, setCouponData] = useState<CouponData | null>(null)
-  const [isCouponLoading, setIsCouponLoading] = useState(false)
-  const [couponError, setCouponError] = useState<string | null>(null)
 
   const [customerData, setCustomerData] = useState<CustomerData>({
     name: "",
@@ -86,19 +72,6 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
     expiryYear: "",
     ccv: "",
   })
-
-  // Calculate final price with discount
-  const calculateFinalPrice = () => {
-    if (!couponData) return plan.price
-
-    if (couponData.type === "PERCENTAGE") {
-      return plan.price * (1 - couponData.discount / 100)
-    }
-    return Math.max(0, plan.price - couponData.discount)
-  }
-
-  const finalPrice = calculateFinalPrice()
-  const discountAmount = plan.price - finalPrice
 
   useEffect(() => {
     if (isOpen) {
@@ -130,46 +103,8 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
       setError(null)
       setCustomerId(null)
       setCepError(null)
-      setCouponCode("")
-      setCouponData(null)
-      setCouponError(null)
     }
   }, [isOpen])
-
-  // Validate coupon
-  const validateCoupon = async () => {
-    if (!couponCode.trim()) return
-
-    setIsCouponLoading(true)
-    setCouponError(null)
-
-    try {
-      const response = await fetch("/api/asaas/coupon", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code: couponCode.trim() }),
-      })
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || "Cupom inválido")
-      }
-
-      setCouponData(data)
-    } catch (err: any) {
-      setCouponError(err.message)
-      setCouponData(null)
-    } finally {
-      setIsCouponLoading(false)
-    }
-  }
-
-  const removeCoupon = () => {
-    setCouponCode("")
-    setCouponData(null)
-    setCouponError(null)
-  }
 
   const fetchAddressByCep = async (cep: string) => {
     const cleanCep = cep.replace(/\D/g, "")
@@ -274,12 +209,12 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
     setStep("processing")
 
     try {
-      const subscriptionPayload: any = {
+      const subscriptionPayload = {
         customerId,
         billingType: "CREDIT_CARD",
-        value: finalPrice,
+        value: plan.price,
         cycle: plan.cycle,
-        description: `${plan.name} - ${plan.period}${couponData ? ` (Cupom: ${couponData.code})` : ""}`,
+        description: `${plan.name} - ${plan.period}`,
         creditCard: {
           holderName: creditCardData.holderName,
           number: creditCardData.number.replace(/\s/g, ""),
@@ -296,15 +231,6 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
           phone: customerData.phone.replace(/\D/g, ""),
         },
         remoteIp: "127.0.0.1",
-      }
-
-      // Add discount info if coupon applied
-      if (couponData) {
-        subscriptionPayload.discount = {
-          value: couponData.type === "PERCENTAGE" ? couponData.discount : discountAmount,
-          dueDateLimitDays: 0,
-          type: couponData.type,
-        }
       }
 
       const response = await fetch("/api/asaas/subscription", {
@@ -372,85 +298,21 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
               <div className="flex justify-between items-start">
                 <div>
                   <span className="text-xs text-zinc-500 uppercase tracking-wide">Valor</span>
-                  {couponData && (
-                    <p className="text-sm text-zinc-500 line-through">R$ {plan.price.toFixed(2).replace(".", ",")}</p>
-                  )}
                 </div>
                 <div className="text-right">
                   <span className="text-2xl font-semibold text-white">
-                    R$ {finalPrice.toFixed(2).replace(".", ",")}
+                    R$ {plan.price.toFixed(2).replace(".", ",")}
                   </span>
                   <span className="text-xs text-zinc-500">/mês</span>
                 </div>
               </div>
-              {couponData && (
-                <div className="mt-2 pt-2 border-t border-zinc-800 flex items-center justify-between">
-                  <div className="flex items-center gap-1.5 text-green-400 text-xs">
-                    <Tag className="w-3 h-3" />
-                    <span>{couponData.code} aplicado</span>
-                  </div>
-                  <span className="text-green-400 text-xs font-medium">
-                    -R$ {discountAmount.toFixed(2).replace(".", ",")}
-                  </span>
-                </div>
-              )}
             </div>
           )}
 
           {/* Step: Customer Data */}
           {step === "customer" && (
             <form onSubmit={handleCustomerSubmit} className="space-y-3">
-              {/* Coupon Field */}
-              <div className="p-3 bg-zinc-900/30 rounded-xl border border-zinc-800/50">
-                <label className="block text-xs text-zinc-400 mb-2 flex items-center gap-1.5">
-                  <Tag className="w-3 h-3" />
-                  Cupom de desconto
-                </label>
-                {couponData ? (
-                  <div className="flex items-center justify-between p-2 bg-green-500/10 border border-green-500/30 rounded-lg">
-                    <div className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-green-400" />
-                      <span className="text-sm text-green-400 font-medium">{couponData.code}</span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={removeCoupon}
-                      className="text-xs text-zinc-400 hover:text-white transition-colors"
-                    >
-                      Remover
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={couponCode}
-                      onChange={(e) => {
-                        setCouponCode(e.target.value.toUpperCase())
-                        setCouponError(null)
-                      }}
-                      className="flex-1 px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#ff4f2d] transition-colors uppercase"
-                      placeholder="Digite o código"
-                    />
-                    <button
-                      type="button"
-                      onClick={validateCoupon}
-                      disabled={!couponCode.trim() || isCouponLoading}
-                      className="px-4 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5"
-                    >
-                      {isCouponLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Aplicar"}
-                    </button>
-                  </div>
-                )}
-                {couponError && (
-                  <p className="mt-2 text-xs text-red-400 flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" />
-                    {couponError}
-                  </p>
-                )}
-              </div>
-
-              <div className="pt-2">
+              <div>
                 <h3 className="text-xs text-zinc-400 mb-3 uppercase tracking-wide">Dados pessoais</h3>
 
                 <div className="space-y-3">
@@ -554,24 +416,26 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
               </div>
 
               {error && (
-                <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg flex items-center gap-2 text-red-400 text-xs">
-                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                  {error}
+                <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                  <p className="text-sm text-red-400 flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4" />
+                    {error}
+                  </p>
                 </div>
               )}
 
               <button
                 type="submit"
-                disabled={isLoading || isCepLoading}
-                className="w-full py-3 bg-[#ff4f2d] hover:bg-[#e6452a] text-white font-medium rounded-xl transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed mt-4"
+                disabled={isLoading || !customerData.street}
+                className="w-full py-3 bg-[#ff4f2d] hover:bg-[#e6452a] text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isLoading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Processando...
-                  </>
+                  <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
-                  "Continuar"
+                  <>
+                    Continuar para pagamento
+                    <CreditCard className="w-4 h-4" />
+                  </>
                 )}
               </button>
             </form>
@@ -580,173 +444,152 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
           {/* Step: Payment */}
           {step === "payment" && (
             <form onSubmit={handlePaymentSubmit} className="space-y-4">
-              {/* Card Icon */}
-              <div className="flex items-center justify-center gap-2 py-3 bg-zinc-900/30 rounded-xl border border-zinc-800/50">
-                <CreditCard className="w-5 h-5 text-[#ff4f2d]" />
-                <span className="text-sm text-zinc-300">Pagamento com Cartão de Crédito</span>
+              <div>
+                <h3 className="text-xs text-zinc-400 mb-3 uppercase tracking-wide flex items-center gap-1.5">
+                  <CreditCard className="w-3 h-3" />
+                  Dados do cartão
+                </h3>
+
+                <div className="space-y-3">
+                  <input
+                    type="text"
+                    required
+                    value={creditCardData.holderName}
+                    onChange={(e) => setCreditCardData({ ...creditCardData, holderName: e.target.value.toUpperCase() })}
+                    className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#ff4f2d] transition-colors uppercase"
+                    placeholder="Nome no cartão"
+                  />
+
+                  <input
+                    type="text"
+                    required
+                    value={creditCardData.number}
+                    onChange={(e) => setCreditCardData({ ...creditCardData, number: formatCardNumber(e.target.value) })}
+                    className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#ff4f2d] transition-colors"
+                    placeholder="Número do cartão"
+                  />
+
+                  <div className="grid grid-cols-3 gap-2">
+                    <input
+                      type="text"
+                      required
+                      maxLength={2}
+                      value={creditCardData.expiryMonth}
+                      onChange={(e) =>
+                        setCreditCardData({ ...creditCardData, expiryMonth: e.target.value.replace(/\D/g, "") })
+                      }
+                      className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#ff4f2d] transition-colors text-center"
+                      placeholder="MM"
+                    />
+                    <input
+                      type="text"
+                      required
+                      maxLength={4}
+                      value={creditCardData.expiryYear}
+                      onChange={(e) =>
+                        setCreditCardData({ ...creditCardData, expiryYear: e.target.value.replace(/\D/g, "") })
+                      }
+                      className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#ff4f2d] transition-colors text-center"
+                      placeholder="AAAA"
+                    />
+                    <div className="relative">
+                      <input
+                        type="text"
+                        required
+                        maxLength={4}
+                        value={creditCardData.ccv}
+                        onChange={(e) =>
+                          setCreditCardData({ ...creditCardData, ccv: e.target.value.replace(/\D/g, "") })
+                        }
+                        className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#ff4f2d] transition-colors text-center"
+                        placeholder="CVV"
+                      />
+                      <Lock className="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-600" />
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <div className="space-y-3">
-                <input
-                  type="text"
-                  required
-                  value={creditCardData.holderName}
-                  onChange={(e) => setCreditCardData({ ...creditCardData, holderName: e.target.value.toUpperCase() })}
-                  className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#ff4f2d] transition-colors uppercase"
-                  placeholder="Nome no cartão"
-                />
-
-                <input
-                  type="text"
-                  required
-                  value={creditCardData.number}
-                  onChange={(e) => setCreditCardData({ ...creditCardData, number: formatCardNumber(e.target.value) })}
-                  className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#ff4f2d] transition-colors"
-                  placeholder="Número do cartão"
-                />
-
-                <div className="grid grid-cols-3 gap-2">
-                  <input
-                    type="text"
-                    required
-                    maxLength={2}
-                    value={creditCardData.expiryMonth}
-                    onChange={(e) =>
-                      setCreditCardData({
-                        ...creditCardData,
-                        expiryMonth: e.target.value.replace(/\D/g, "").slice(0, 2),
-                      })
-                    }
-                    className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#ff4f2d] transition-colors text-center"
-                    placeholder="MM"
-                  />
-                  <input
-                    type="text"
-                    required
-                    maxLength={4}
-                    value={creditCardData.expiryYear}
-                    onChange={(e) =>
-                      setCreditCardData({
-                        ...creditCardData,
-                        expiryYear: e.target.value.replace(/\D/g, "").slice(0, 4),
-                      })
-                    }
-                    className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#ff4f2d] transition-colors text-center"
-                    placeholder="AAAA"
-                  />
-                  <input
-                    type="text"
-                    required
-                    maxLength={4}
-                    value={creditCardData.ccv}
-                    onChange={(e) =>
-                      setCreditCardData({ ...creditCardData, ccv: e.target.value.replace(/\D/g, "").slice(0, 4) })
-                    }
-                    className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#ff4f2d] transition-colors text-center"
-                    placeholder="CVV"
-                  />
+              <div className="p-3 bg-zinc-900/30 rounded-lg border border-zinc-800/50">
+                <div className="flex items-center gap-2 text-xs text-zinc-400">
+                  <ShieldCheck className="w-4 h-4 text-green-500" />
+                  <span>Pagamento seguro com criptografia SSL</span>
                 </div>
               </div>
 
               {error && (
-                <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg flex items-center gap-2 text-red-400 text-xs">
-                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                  {error}
+                <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                  <p className="text-sm text-red-400 flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4" />
+                    {error}
+                  </p>
                 </div>
               )}
 
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3 bg-[#ff4f2d] hover:bg-[#e6452a] text-white font-medium rounded-xl transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-3 bg-[#ff4f2d] hover:bg-[#e6452a] text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isLoading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Processando...
-                  </>
+                  <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
                   <>
                     <Lock className="w-4 h-4" />
-                    Pagar R$ {finalPrice.toFixed(2).replace(".", ",")}
+                    Pagar R$ {plan.price.toFixed(2).replace(".", ",")}
                   </>
                 )}
               </button>
-
-              <p className="text-[10px] text-zinc-600 text-center flex items-center justify-center gap-1">
-                <ShieldCheck className="w-3 h-3" />
-                Pagamento seguro criptografado
-              </p>
             </form>
           )}
 
           {/* Step: Processing */}
           {step === "processing" && (
             <div className="py-12 text-center">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#ff4f2d]/10 flex items-center justify-center">
-                <Loader2 className="w-8 h-8 text-[#ff4f2d] animate-spin" />
-              </div>
-              <h3 className="text-lg font-medium text-white mb-1">Processando pagamento</h3>
-              <p className="text-sm text-zinc-500">Aguarde alguns segundos...</p>
+              <Loader2 className="w-12 h-12 text-[#ff4f2d] animate-spin mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-white mb-2">Processando pagamento</h3>
+              <p className="text-sm text-zinc-400">Aguarde enquanto confirmamos seu pagamento...</p>
             </div>
           )}
 
           {/* Step: Success */}
           {step === "success" && (
-            <div className="py-8 text-center">
-              <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Check className="w-10 h-10 text-green-400" />
+            <div className="py-12 text-center">
+              <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Check className="w-8 h-8 text-green-500" />
               </div>
-              <h3 className="text-2xl font-semibold text-white mb-3">Assinatura Realizada com Sucesso!</h3>
-              <p className="text-sm text-zinc-400 mb-2">
-                Parabéns! Você agora é membro do <span className="text-[#ff4f2d] font-medium">{plan.name}</span>
+              <h3 className="text-lg font-medium text-white mb-2">Pagamento confirmado!</h3>
+              <p className="text-sm text-zinc-400 mb-6">
+                Sua assinatura do {plan.name} foi ativada com sucesso.
               </p>
-              <p className="text-xs text-zinc-500 mb-8">
-                Você receberá um e-mail de confirmação com todos os detalhes da sua assinatura.
-              </p>
-              <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 mb-6">
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-zinc-400">Plano</span>
-                  <span className="text-white font-medium">{plan.name}</span>
-                </div>
-                <div className="flex justify-between items-center text-sm mt-2">
-                  <span className="text-zinc-400">Período</span>
-                  <span className="text-white">{plan.period}</span>
-                </div>
-                <div className="flex justify-between items-center text-sm mt-2">
-                  <span className="text-zinc-400">Valor</span>
-                  <span className="text-[#ff4f2d] font-medium">R$ {finalPrice.toFixed(2).replace(".", ",")}/mês</span>
-                </div>
-              </div>
               <button
                 onClick={onClose}
-                className="w-full py-3.5 bg-[#ff4f2d] hover:bg-[#e6452a] text-white font-medium rounded-xl transition-colors"
+                className="px-6 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-white font-medium rounded-lg transition-colors"
               >
-                Concluir
+                Fechar
               </button>
             </div>
           )}
 
           {/* Step: Error */}
           {step === "error" && (
-            <div className="py-8 text-center">
+            <div className="py-12 text-center">
               <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <AlertCircle className="w-8 h-8 text-red-400" />
+                <X className="w-8 h-8 text-red-500" />
               </div>
-              <h3 className="text-xl font-medium text-white mb-2">Erro no pagamento</h3>
-              <p className="text-sm text-zinc-400 mb-6">
-                {error || "Não foi possível processar seu pagamento. Verifique os dados e tente novamente."}
-              </p>
-              <div className="flex gap-2">
+              <h3 className="text-lg font-medium text-white mb-2">Erro no pagamento</h3>
+              <p className="text-sm text-zinc-400 mb-2">{error || "Ocorreu um erro ao processar seu pagamento."}</p>
+              <p className="text-xs text-zinc-500 mb-6">Verifique os dados do cartão e tente novamente.</p>
+              <div className="flex gap-3 justify-center">
                 <button
                   onClick={() => setStep("payment")}
-                  className="flex-1 py-3 bg-zinc-800 hover:bg-zinc-700 text-white font-medium rounded-xl transition-colors"
+                  className="px-6 py-2.5 bg-[#ff4f2d] hover:bg-[#e6452a] text-white font-medium rounded-lg transition-colors"
                 >
                   Tentar novamente
                 </button>
                 <button
                   onClick={onClose}
-                  className="flex-1 py-3 bg-[#ff4f2d] hover:bg-[#e6452a] text-white font-medium rounded-xl transition-colors"
+                  className="px-6 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-white font-medium rounded-lg transition-colors"
                 >
                   Fechar
                 </button>
@@ -754,9 +597,6 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
             </div>
           )}
         </div>
-
-        {/* Fixed Footer */}
-        <div className="flex-shrink-0 p-4 border-t border-zinc-800 bg-zinc-950/95 backdrop-blur-sm"></div>
       </div>
     </div>
   )
