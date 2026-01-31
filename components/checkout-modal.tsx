@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState, useEffect } from "react"
-import { X, CreditCard, Loader2, Check, AlertCircle, Lock, MapPin, ChevronLeft, ShieldCheck } from "lucide-react"
+import { X, CreditCard, Loader2, Check, AlertCircle, Lock, MapPin, ChevronLeft, ShieldCheck, Tag } from "lucide-react"
 
 interface CheckoutModalProps {
   isOpen: boolean
@@ -46,6 +46,14 @@ interface CepResponse {
   street: string
 }
 
+interface CouponData {
+  valid: boolean
+  code: string
+  discount: number
+  type: "PERCENTAGE" | "FIXED"
+  description: string
+}
+
 export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
   const [step, setStep] = useState<"customer" | "payment" | "processing" | "success" | "error">("customer")
   const [isLoading, setIsLoading] = useState(false)
@@ -53,6 +61,12 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
   const [customerId, setCustomerId] = useState<string | null>(null)
   const [isCepLoading, setIsCepLoading] = useState(false)
   const [cepError, setCepError] = useState<string | null>(null)
+
+  // Coupon state
+  const [couponCode, setCouponCode] = useState("")
+  const [couponData, setCouponData] = useState<CouponData | null>(null)
+  const [isCouponLoading, setIsCouponLoading] = useState(false)
+  const [couponError, setCouponError] = useState<string | null>(null)
 
   const [customerData, setCustomerData] = useState<CustomerData>({
     name: "",
@@ -105,8 +119,63 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
       setError(null)
       setCustomerId(null)
       setCepError(null)
+      setCouponCode("")
+      setCouponData(null)
+      setCouponError(null)
     }
   }, [isOpen])
+
+  // Calculate discounted price
+  const getDiscountedPrice = (originalPrice: number) => {
+    if (!couponData) return originalPrice
+    if (couponData.type === "PERCENTAGE") {
+      return originalPrice * (1 - couponData.discount / 100)
+    }
+    return Math.max(0, originalPrice - couponData.discount)
+  }
+
+  const discountedPrice = getDiscountedPrice(plan.price)
+  const discountedTotal = getDiscountedPrice(plan.totalPrice)
+
+  const validateCoupon = async () => {
+    if (!couponCode.trim()) {
+      setCouponError("Digite um código de cupom")
+      return
+    }
+
+    setIsCouponLoading(true)
+    setCouponError(null)
+
+    try {
+      const response = await fetch("/api/asaas/coupon", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: couponCode }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        setCouponError(data.error || "Cupom inválido")
+        setCouponData(null)
+        return
+      }
+
+      setCouponData(data)
+      setCouponError(null)
+    } catch {
+      setCouponError("Erro ao validar cupom")
+      setCouponData(null)
+    } finally {
+      setIsCouponLoading(false)
+    }
+  }
+
+  const removeCoupon = () => {
+    setCouponCode("")
+    setCouponData(null)
+    setCouponError(null)
+  }
 
   const fetchAddressByCep = async (cep: string) => {
     const cleanCep = cep.replace(/\D/g, "")
@@ -214,10 +283,10 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
       const subscriptionPayload = {
         customerId,
         billingType: "CREDIT_CARD",
-        value: plan.price,
+        value: discountedPrice, // Usar preço com desconto se houver cupom
         cycle: "MONTHLY",
         maxPayments: plan.installments > 1 ? plan.installments : undefined, // Se for semestral (6) ou anual (12), limita as parcelas
-        description: `${plan.name} - ${plan.period}`,
+        description: `${plan.name} - ${plan.period}${couponData ? ` (Cupom: ${couponData.code})` : ""}`,
         creditCard: {
           holderName: creditCardData.holderName,
           number: creditCardData.number.replace(/\s/g, ""),
@@ -305,17 +374,93 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
                   </span>
                   {plan.installments > 1 && (
                     <p className="text-xs text-zinc-600 mt-1">
-                      Total: R$ {plan.totalPrice.toFixed(2).replace(".", ",")}
+                      Total: {couponData ? (
+                        <>
+                          <span className="line-through text-zinc-600">R$ {plan.totalPrice.toFixed(2).replace(".", ",")}</span>
+                          {" "}
+                          <span className="text-green-500">R$ {discountedTotal.toFixed(2).replace(".", ",")}</span>
+                        </>
+                      ) : (
+                        `R$ ${plan.totalPrice.toFixed(2).replace(".", ",")}`
+                      )}
                     </p>
                   )}
                 </div>
                 <div className="text-right">
-                  <span className="text-2xl font-semibold text-white">
-                    R$ {plan.price.toFixed(2).replace(".", ",")}
-                  </span>
+                  {couponData ? (
+                    <>
+                      <span className="text-sm line-through text-zinc-600">
+                        R$ {plan.price.toFixed(2).replace(".", ",")}
+                      </span>
+                      <br />
+                      <span className="text-2xl font-semibold text-green-500">
+                        R$ {discountedPrice.toFixed(2).replace(".", ",")}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-2xl font-semibold text-white">
+                      R$ {plan.price.toFixed(2).replace(".", ",")}
+                    </span>
+                  )}
                   <span className="text-xs text-zinc-500">/mês</span>
                 </div>
               </div>
+              {couponData && (
+                <div className="mt-2 pt-2 border-t border-zinc-800 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Tag className="w-3.5 h-3.5 text-green-500" />
+                    <span className="text-xs text-green-500">{couponData.code}: {couponData.description}</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={removeCoupon}
+                    className="text-xs text-zinc-500 hover:text-red-400 transition-colors"
+                  >
+                    Remover
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Coupon Field - Only on customer step */}
+          {step === "customer" && !couponData && (
+            <div className="mb-4">
+              <div className="flex gap-2">
+                <div className="flex-1 relative">
+                  <Tag className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                  <input
+                    type="text"
+                    value={couponCode}
+                    onChange={(e) => {
+                      setCouponCode(e.target.value.toUpperCase())
+                      setCouponError(null)
+                    }}
+                    placeholder="Cupom de desconto"
+                    className={`w-full pl-9 pr-3 py-2.5 bg-zinc-900/50 border rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none transition-colors ${
+                      couponError ? "border-red-500" : "border-zinc-800 focus:border-[#ff4f2d]"
+                    }`}
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={validateCoupon}
+                  disabled={isCouponLoading || !couponCode.trim()}
+                  className="px-4 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  {isCouponLoading ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    "Aplicar"
+                  )}
+                </button>
+              </div>
+              {couponError && (
+                <p className="text-xs text-red-400 mt-1.5 flex items-center gap-1">
+                  <AlertCircle className="w-3 h-3" />
+                  {couponError}
+                </p>
+              )}
             </div>
           )}
 
@@ -546,7 +691,7 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
                 ) : (
                   <>
                     <Lock className="w-4 h-4" />
-                    Pagar R$ {plan.price.toFixed(2).replace(".", ",")}
+                    Pagar R$ {discountedPrice.toFixed(2).replace(".", ",")}
                   </>
                 )}
               </button>
