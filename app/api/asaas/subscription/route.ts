@@ -6,7 +6,7 @@ const ASAAS_API_KEY = process.env.ASAAS_API_KEY
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { customerId, billingType, value, cycle, description, creditCard, creditCardHolderInfo, remoteIp } = body
+    const { customerId, billingType, value, cycle, description, creditCard, creditCardHolderInfo, remoteIp, maxPayments } = body
 
     // Calcular próxima data de vencimento
     const nextDueDate = new Date()
@@ -17,9 +17,14 @@ export async function POST(request: NextRequest) {
       customer: customerId,
       billingType,
       value,
-      cycle,
+      cycle: "MONTHLY", // Sempre MONTHLY - cobrança mensal recorrente
       description,
       nextDueDate: formattedDate,
+    }
+    
+    // Se tiver limite de parcelas (semestral ou anual), definir maxPayments
+    if (maxPayments && maxPayments > 1) {
+      subscriptionData.maxPayments = maxPayments
     }
 
     // Se for cartão de crédito, adicionar dados do cartão

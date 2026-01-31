@@ -11,7 +11,9 @@ interface CheckoutModalProps {
     name: string
     period: string
     price: number
-    cycle: "MONTHLY" | "SEMIANNUALLY" | "YEARLY"
+    totalPrice: number
+    installments: number
+    cycle: "MONTHLY"
   }
 }
 
@@ -213,7 +215,8 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
         customerId,
         billingType: "CREDIT_CARD",
         value: plan.price,
-        cycle: plan.cycle,
+        cycle: "MONTHLY",
+        maxPayments: plan.installments > 1 ? plan.installments : undefined, // Se for semestral (6) ou anual (12), limita as parcelas
         description: `${plan.name} - ${plan.period}`,
         creditCard: {
           holderName: creditCardData.holderName,
@@ -297,7 +300,14 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
             <div className="mb-4 p-3 bg-gradient-to-r from-zinc-900 to-zinc-900/50 rounded-xl border border-zinc-800">
               <div className="flex justify-between items-start">
                 <div>
-                  <span className="text-xs text-zinc-500 uppercase tracking-wide">Valor</span>
+                  <span className="text-xs text-zinc-500 uppercase tracking-wide">
+                    {plan.installments > 1 ? `${plan.installments}x sem juros` : "Mensal recorrente"}
+                  </span>
+                  {plan.installments > 1 && (
+                    <p className="text-xs text-zinc-600 mt-1">
+                      Total: R$ {plan.totalPrice.toFixed(2).replace(".", ",")}
+                    </p>
+                  )}
                 </div>
                 <div className="text-right">
                   <span className="text-2xl font-semibold text-white">
