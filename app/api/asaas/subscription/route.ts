@@ -42,8 +42,23 @@ export async function POST(request: NextRequest) {
 
     if (!response.ok) {
       console.error("[Asaas] Error creating subscription:", data)
+      
+      // Tratar erros específicos de cartão de crédito
+      const errorCode = data.errors?.[0]?.code
+      let friendlyMessage = "Erro ao criar assinatura"
+      
+      if (errorCode === "invalid_creditCard" || errorCode === "invalid_creditCardNumber") {
+        friendlyMessage = "Pagamento não autorizado, verifique seu cartão."
+      } else if (errorCode === "invalid_creditCardHolderInfo") {
+        friendlyMessage = "Dados do titular do cartão inválidos."
+      } else if (errorCode === "invalid_value") {
+        friendlyMessage = "Valor inválido para a assinatura."
+      } else if (data.errors?.[0]?.description) {
+        friendlyMessage = data.errors[0].description
+      }
+      
       return NextResponse.json(
-        { error: data.errors?.[0]?.description || "Erro ao criar assinatura" },
+        { error: friendlyMessage },
         { status: response.status },
       )
     }
