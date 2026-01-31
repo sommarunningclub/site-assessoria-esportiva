@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Check, X } from "lucide-react"
 import Image from "next/image"
 import { CheckoutModal } from "./checkout-modal"
+import { AccessCodeModal } from "./access-code-modal"
 
 const benefits = [
   { name: "Presença VIP nas provas Somma", membership: true, assessoria: true },
@@ -38,6 +39,7 @@ export function PricingPlans() {
   const [assessoriaPeriod, setAssessoriaPeriod] = useState<"mensal" | "semestral" | "anual">("semestral")
 
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
+  const [isAccessCodeOpen, setIsAccessCodeOpen] = useState(false)
   const [selectedPlan, setSelectedPlan] = useState<{
     name: string
     period: string
@@ -81,6 +83,11 @@ export function PricingPlans() {
       price,
       cycle: getCycle(period),
     })
+    setIsAccessCodeOpen(true)
+  }
+
+  const handleAccessCodeSuccess = () => {
+    setIsAccessCodeOpen(false)
     setIsCheckoutOpen(true)
   }
 
@@ -210,7 +217,14 @@ export function PricingPlans() {
       </div>
 
       {selectedPlan && (
-        <CheckoutModal isOpen={isCheckoutOpen} onClose={() => setIsCheckoutOpen(false)} plan={selectedPlan} />
+        <>
+          <AccessCodeModal
+            isOpen={isAccessCodeOpen}
+            onClose={() => setIsAccessCodeOpen(false)}
+            onSuccess={handleAccessCodeSuccess}
+          />
+          <CheckoutModal isOpen={isCheckoutOpen} onClose={() => setIsCheckoutOpen(false)} plan={selectedPlan} />
+        </>
       )}
     </div>
   )
