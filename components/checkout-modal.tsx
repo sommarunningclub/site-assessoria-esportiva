@@ -48,10 +48,22 @@ interface CepResponse {
 
 interface CouponData {
   valid: boolean
-  code: string
-  discount: number
-  type: "PERCENTAGE" | "FIXED"
-  description: string
+  coupon: {
+    code: string
+    type: "PERCENTAGE" | "FIXED"
+    value: number
+    description: string
+  }
+  calculation: {
+    originalValue: number
+    discount: number
+    finalValue: number
+  }
+  asaasDiscount: {
+    value: number
+    dueDateLimitDays: number
+    type: string
+  }
 }
 
 export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
@@ -125,17 +137,18 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
     }
   }, [isOpen])
 
-  // Calculate discounted price
+  // Calculate discounted price using the new API structure
   const getDiscountedPrice = (originalPrice: number) => {
     if (!couponData) return originalPrice
-    if (couponData.type === "PERCENTAGE") {
-      return originalPrice * (1 - couponData.discount / 100)
+    if (couponData.coupon.type === "PERCENTAGE") {
+      return originalPrice * (1 - couponData.coupon.value / 100)
     }
-    return Math.max(0, originalPrice - couponData.discount)
+    return Math.max(0, originalPrice - couponData.coupon.value)
   }
 
   const discountedPrice = getDiscountedPrice(plan.price)
   const discountedTotal = getDiscountedPrice(plan.totalPrice)
+  const discountAmount = couponData ? (plan.price - discountedPrice) : 0
 
   const validateCoupon = async () => {
     if (!couponCode.trim()) {
@@ -147,15 +160,13 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
     setCouponError(null)
 
     try {
-      const response = await fetch("/api/asaas/coupon", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code: couponCode }),
-      })
+      const response = await fetch(
+        `/api/checkout/validate-coupon?code=${encodeURIComponent(couponCode)}&value=${plan.price}`
+      )
 
       const data = await response.json()
 
-      if (!response.ok) {
+      if (!data.valid) {
         setCouponError(data.error || "Cupom inválido")
         setCouponData(null)
         return
@@ -280,13 +291,13 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
     setStep("processing")
 
     try {
-      const subscriptionPayload = {
+      const subscriptionPayload: any = {
         customerId,
         billingType: "CREDIT_CARD",
         value: discountedPrice, // Usar preço com desconto se houver cupom
         cycle: "MONTHLY",
         maxPayments: plan.installments > 1 ? plan.installments : undefined, // Se for semestral (6) ou anual (12), limita as parcelas
-        description: `${plan.name} - ${plan.period}${couponData ? ` (Cupom: ${couponData.code})` : ""}`,
+        description: `${plan.name} - ${plan.period}${couponData ? ` (Cupom: ${couponData.coupon.code})` : ""}`,
         creditCard: {
           holderName: creditCardData.holderName,
           number: creditCardData.number.replace(/\s/g, ""),
@@ -409,7 +420,9 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
                 <div className="mt-2 pt-2 border-t border-zinc-800 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Tag className="w-3.5 h-3.5 text-green-500" />
-                    <span className="text-xs text-green-500">{couponData.code}: {couponData.description}</span>
+                    <span className="text-xs text-green-500">
+                      {couponData.coupon.code}: -R$ {discountAmount.toFixed(2).replace(".", ",")}
+                    </span>
                   </div>
                   <button
                     type="button"
