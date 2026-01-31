@@ -6,6 +6,7 @@ const COUPONS: Record<string, { type: "PERCENTAGE" | "FIXED"; value: number; des
   "SOMMA20": { type: "PERCENTAGE", value: 20, description: "20% de desconto", active: true },
   "SOMMA50": { type: "FIXED", value: 50, description: "R$ 50,00 de desconto", active: true },
   "PRIMEIRACOMPRA": { type: "PERCENTAGE", value: 15, description: "15% na primeira compra", active: true },
+  "SOMMA99": { type: "PERCENTAGE", value: 99, description: "99% de desconto", active: true },
 }
 
 export async function GET(request: Request) {
