@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 
 const ASAAS_API_KEY = process.env.ASAAS_API_KEY
-const ASAAS_API_URL = "https://api-sandbox.asaas.com/v3"
+const ASAAS_API_URL = "https://api.asaas.com/v3"
 
 async function getPaymentStatistics(status?: string) {
   const url = status
