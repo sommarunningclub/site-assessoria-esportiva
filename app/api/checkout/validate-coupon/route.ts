@@ -46,6 +46,9 @@ export async function GET(request: Request) {
       )
     }
 
+    // Valor mínimo exigido pelo Asaas para cartão de crédito
+    const MINIMUM_VALUE = 5.00
+
     // Calcular desconto
     let discountAmount: number
     if (coupon.type === "PERCENTAGE") {
@@ -54,7 +57,21 @@ export async function GET(request: Request) {
       discountAmount = Math.min(coupon.value, value) // Não pode ser maior que o valor total
     }
 
-    const finalValue = Math.max(0, value - discountAmount)
+    // Garantir que o valor final não seja menor que o mínimo do Asaas
+    let finalValue = value - discountAmount
+    if (finalValue < MINIMUM_VALUE) {
+      // Ajustar o desconto para garantir o valor mínimo
+      discountAmount = value - MINIMUM_VALUE
+      finalValue = MINIMUM_VALUE
+    }
+    
+    // Se o desconto ficou zerado ou negativo, o cupom não se aplica
+    if (discountAmount <= 0) {
+      return NextResponse.json(
+        { valid: false, error: "Cupom não aplicável para este valor" },
+        { status: 400 }
+      )
+    }
 
     return NextResponse.json({
       valid: true,
