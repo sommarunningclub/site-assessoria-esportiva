@@ -8,10 +8,9 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { customerId, billingType, value, cycle, description, creditCard, creditCardHolderInfo, remoteIp, maxPayments } = body
 
-    // Calcular próxima data de vencimento
-    const nextDueDate = new Date()
-    nextDueDate.setDate(nextDueDate.getDate() + 1)
-    const formattedDate = nextDueDate.toISOString().split("T")[0]
+    // Data de hoje para cobrança imediata
+    const today = new Date()
+    const formattedToday = today.toISOString().split("T")[0]
 
     const subscriptionData: any = {
       customer: customerId,
@@ -19,7 +18,7 @@ export async function POST(request: NextRequest) {
       value,
       cycle: "MONTHLY", // Sempre MONTHLY - cobrança mensal recorrente
       description,
-      nextDueDate: formattedDate,
+      nextDueDate: formattedToday, // Data de hoje para cobrar imediatamente
     }
     
     // Se tiver limite de parcelas (semestral ou anual), definir maxPayments
