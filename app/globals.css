@@ -37,8 +37,6 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-
-  /* Racing lines animation offset variables */
   --animations--line-1-offset: 0px;
   --animations--line-2-offset: 0px;
   --animations--line-3-offset: 0px;
@@ -123,7 +121,8 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    border-color: var(--border);
+    outline-color: color-mix(in oklch, var(--ring) 50%, transparent);
   }
   body {
     @apply bg-background text-foreground;
@@ -131,7 +130,6 @@
 }
 
 @layer utilities {
-  /* Added bg-lines-container with responsive scaling */
   .bg-lines-container {
     position: fixed;
     inset: 0%;
@@ -139,7 +137,6 @@
     width: 100vw;
     height: 100vh;
   }
-
   @media screen and (max-width: 991px) {
     .bg-lines-container {
       display: block;
@@ -147,100 +144,48 @@
       transform: scale(1.125);
     }
   }
-
   @media screen and (max-width: 767px) {
     .bg-lines-container {
       transform: scale(1.05);
       object-fit: contain;
     }
   }
-
   @media screen and (max-width: 479px) {
     .bg-lines-container {
       transform: scale(1.8);
     }
   }
-
-  /* Changed display from none to block so Spline viewer is visible */
   .track {
     position: fixed;
     inset: 0%;
     display: block;
     margin-top: 0vh;
   }
-
   @keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
-
   @keyframes fade-in-up {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
   }
-
-  /* Added racing line animations with varying speeds */
-  /* Reversed flow (0 to -3000px) and doubled animation durations */
   @keyframes line-race {
-    from {
-      stroke-dashoffset: 0px;
-    }
-    to {
-      stroke-dashoffset: -3000px;
-    }
+    from { stroke-dashoffset: 0px; }
+    to { stroke-dashoffset: -3000px; }
   }
-
-  .animate-line-race-1 {
-    animation: line-race 1.6s ease-in-out infinite;
-  }
-
-  .animate-line-race-2 {
-    animation: line-race 1.2s ease-in-out infinite;
-  }
-
-  .animate-line-race-3 {
-    animation: line-race 2s ease-in-out infinite;
-  }
-
-  .animate-line-race-4 {
-    animation: line-race 1s ease-in-out infinite;
-  }
-
-  .animate-fade-in {
-    animation: fade-in 0.8s ease-out forwards;
-  }
-
-  .animate-fade-in-up {
-    animation: fade-in-up 0.8s ease-out forwards;
-  }
-
-  .animation-delay-200 {
-    animation-delay: 0.2s;
-    opacity: 0;
-  }
-
-  .animation-delay-400 {
-    animation-delay: 0.4s;
-    opacity: 0;
-  }
-
-  /* Refined glowing border effect with purple tones to match reference */
+  .animate-line-race-1 { animation: line-race 1.6s ease-in-out infinite; }
+  .animate-line-race-2 { animation: line-race 1.2s ease-in-out infinite; }
+  .animate-line-race-3 { animation: line-race 2s ease-in-out infinite; }
+  .animate-line-race-4 { animation: line-race 1s ease-in-out infinite; }
+  .animate-fade-in { animation: fade-in 0.8s ease-out forwards; }
+  .animate-fade-in-up { animation: fade-in-up 0.8s ease-out forwards; }
+  .animation-delay-200 { animation-delay: 0.2s; opacity: 0; }
+  .animation-delay-400 { animation-delay: 0.4s; opacity: 0; }
   .glow-border {
     position: relative;
     border-radius: 1.5rem;
     overflow: hidden;
   }
-
   .glow-border::before {
     content: "";
     position: absolute;
@@ -253,24 +198,15 @@
     mask-composite: exclude;
     pointer-events: none;
   }
-
   .glow-border::after {
     content: "";
     position: absolute;
     inset: -20px;
-    background: radial-gradient(
-      circle 150px at var(--mouse-x, 50%) var(--mouse-y, 50%),
-      rgba(255, 79, 45, 0.15),
-      rgba(255, 79, 45, 0.08),
-      transparent 70%
-    );
+    background: radial-gradient(circle 150px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 79, 45, 0.15), rgba(255, 79, 45, 0.08), transparent 70%);
     transition: opacity 0.3s ease;
     opacity: 0;
     pointer-events: none;
     border-radius: inherit;
   }
-
-  .glow-border:hover::after {
-    opacity: 1;
-  }
+  .glow-border:hover::after { opacity: 1; }
 }

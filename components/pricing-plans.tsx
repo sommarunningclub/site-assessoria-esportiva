@@ -44,44 +44,33 @@ export function PricingPlans() {
     name: string
     period: string
     price: number
-    cycle: "MONTHLY" | "SEMIANNUALLY" | "YEARLY"
+    totalPrice: number
+    installments: number
+    cycle: "MONTHLY"
   } | null>(null)
 
-  const membershipPrices = {
-    mensal: { price: 150, total: 150, savings: null },
-    semestral: { price: 130, total: 780, savings: "R$ 180 de economia" },
-    anual: { price: 110, total: 1320, savings: "R$ 540 de economia" },
-  }
-
   const assessoriaPrices = {
-    mensal: { price: 220, total: 220, savings: null },
-    semestral: { price: 200, total: 1200, savings: "R$ 120 de economia" },
-    anual: { price: 180, total: 2160, savings: "R$ 480 de economia" },
+    mensal: { price: 220, total: 220, installments: 1, savings: null, description: "Cobrança mensal recorrente" },
+    semestral: { price: 200, total: 1200, installments: 6, savings: "R$ 120 de economia", description: "6x R$ 200,00 sem juros" },
+    anual: { price: 180, total: 2160, installments: 12, savings: "R$ 480 de economia", description: "12x R$ 180,00 sem juros" },
   }
 
-  const getCycle = (period: "mensal" | "semestral" | "anual"): "MONTHLY" | "SEMIANNUALLY" | "YEARLY" => {
-    switch (period) {
-      case "mensal":
-        return "MONTHLY"
-      case "semestral":
-        return "SEMIANNUALLY"
-      case "anual":
-        return "YEARLY"
-    }
-  }
-
-  const handleSubscribe = (planName: string, period: "mensal" | "semestral" | "anual", price: number) => {
+  const handleSubscribe = (planName: string, period: "mensal" | "semestral" | "anual") => {
     const periodLabels = {
       mensal: "Mensal",
       semestral: "Semestral",
       anual: "Anual",
     }
+    
+    const priceData = assessoriaPrices[period]
 
     setSelectedPlan({
       name: planName,
       period: periodLabels[period],
-      price,
-      cycle: getCycle(period),
+      price: priceData.price,
+      totalPrice: priceData.total,
+      installments: priceData.installments,
+      cycle: "MONTHLY", // Sempre MONTHLY - cobrança mensal recorrente
     })
     setIsAccessCodeOpen(true)
   }
@@ -144,12 +133,31 @@ export function PricingPlans() {
               </span>
               <span className="text-zinc-400 text-sm sm:text-base">/mês</span>
             </div>
+            {/* Total e parcelas */}
+            {assessoriaPeriod !== "mensal" && (
+              <div className="mt-2">
+                <p className="text-sm text-zinc-400">
+                  Total: <span className="text-white font-medium">R$ {assessoriaPrices[assessoriaPeriod].total.toFixed(2).replace(".", ",")}</span>
+                </p>
+                <p className="text-xs text-[#ff4f2d]">
+                  {assessoriaPrices[assessoriaPeriod].description}
+                </p>
+              </div>
+            )}
+            {assessoriaPeriod === "mensal" && (
+              <p className="text-xs text-zinc-500 mt-2">
+                {assessoriaPrices[assessoriaPeriod].description}
+              </p>
+            )}
+            {assessoriaPrices[assessoriaPeriod].savings && (
+              <p className="text-xs text-green-500 mt-1">
+                {assessoriaPrices[assessoriaPeriod].savings}
+              </p>
+            )}
           </div>
 
           <button
-            onClick={() =>
-              handleSubscribe("Somma Assessoria", assessoriaPeriod, assessoriaPrices[assessoriaPeriod].price)
-            }
+            onClick={() => handleSubscribe("Somma Assessoria", assessoriaPeriod)}
             className="w-full py-2.5 sm:py-3 md:py-4 px-4 rounded-lg bg-[#ff4f2d] text-black font-light hover:bg-[#ff6647] transition-colors text-sm sm:text-base"
           >
             Assinar Agora
