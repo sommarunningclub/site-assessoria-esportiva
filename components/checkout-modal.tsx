@@ -137,18 +137,14 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
     }
   }, [isOpen])
 
-  // Calculate discounted price using the new API structure
-  const getDiscountedPrice = (originalPrice: number) => {
-    if (!couponData) return originalPrice
-    if (couponData.coupon.type === "PERCENTAGE") {
-      return originalPrice * (1 - couponData.coupon.value / 100)
-    }
-    return Math.max(0, originalPrice - couponData.coupon.value)
-  }
-
-  const discountedPrice = getDiscountedPrice(plan.price)
-  const discountedTotal = getDiscountedPrice(plan.totalPrice)
-  const discountAmount = couponData ? (plan.price - discountedPrice) : 0
+  // Use the finalValue from API which respects the R$ 5.00 minimum
+  const discountedPrice = couponData ? couponData.calculation.finalValue : plan.price
+  const discountAmount = couponData ? couponData.calculation.discount : 0
+  
+  // Calculate discounted total proportionally
+  const discountedTotal = couponData 
+    ? plan.totalPrice - (discountAmount * plan.installments)
+    : plan.totalPrice
 
   const validateCoupon = async () => {
     if (!couponCode.trim()) {
