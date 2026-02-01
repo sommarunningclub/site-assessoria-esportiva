@@ -723,9 +723,15 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
                 <Check className="w-8 h-8 text-green-500" />
               </div>
               <h3 className="text-lg font-medium text-white mb-2">Pagamento confirmado!</h3>
-              <p className="text-sm text-zinc-400 mb-6">
+              <p className="text-sm text-zinc-400 mb-4">
                 Sua assinatura do {plan.name} foi ativada com sucesso.
               </p>
+              <div className="bg-zinc-900/50 border border-zinc-800 rounded-lg p-4 mb-6 mx-4">
+                <p className="text-sm text-[#ff4f2d] font-medium mb-1">Próximos passos</p>
+                <p className="text-sm text-zinc-300">
+                  A equipe Somma Assessoria entrará em contato para o onboarding.
+                </p>
+              </div>
               <button
                 onClick={onClose}
                 className="px-6 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-white font-medium rounded-lg transition-colors"
