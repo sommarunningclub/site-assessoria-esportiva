@@ -9,10 +9,14 @@ export async function POST(request: NextRequest) {
     const { customerId, billingType, value, cycle, description, creditCard, creditCardHolderInfo, remoteIp, maxPayments } = body
 
     // PASSO 1: Criar uma cobrança avulsa imediata (payment one-time)
+    const today = new Date()
+    const formattedToday = today.toISOString().split("T")[0]
+
     const paymentData = {
       customer: customerId,
       billingType,
       value,
+      dueDate: formattedToday, // Data de hoje para cobrar imediatamente
       description: `${description} - Cobrança Imediata`,
       creditCard,
       creditCardHolderInfo,
