@@ -155,12 +155,12 @@ export default function Home() {
           </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-light mb-4 sm:mb-6 md:mb-8 leading-[1.15] sm:leading-[1.1] animate-fade-in text-balance">
-            Somma Running Club Membros
+            Assessoria Somma Club
           </h1>
 
           {/* Subheading */}
           <p className="text-sm sm:text-base md:text-lg lg:text-xl text-zinc-400 mb-6 sm:mb-8 md:mb-12 animate-fade-in-up animation-delay-200 max-w-xl">
-            Grupo Exclusivo de Membros para ajudar na sua performance.
+            Treinamento personalizado para corredores que buscam evoluir com acompanhamento profissional.
           </p>
 
           {/* CTA Button */}
@@ -181,13 +181,12 @@ export default function Home() {
       <section id="capabilities" className="relative z-20 py-12 sm:py-16 md:py-24">
         <div className="container p-4 sm:p-6 md:p-8 lg:p-12 rounded-xl sm:rounded-2xl z-50 bg-[#09090b] border border-zinc-800 mx-auto">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light mb-4 sm:mb-6 text-balance">
-            Lista VIP Somma Club Membros
+            Assessoria Esportiva Personalizada
           </h2>
 
           <p className="text-sm sm:text-base md:text-lg lg:text-xl text-zinc-400 mb-6 sm:mb-8 md:mb-12 leading-relaxed">
-            Estamos preparando algo especial para a nossa comunidade. O SOMMA Club ainda não está aberto, mas você pode
-            garantir seu lugar na lista VIP e ser o primeiro a saber quando as inscrições abrirem com condições
-            exclusivas de lançamento.
+            Treine com planejamento profissional, acompanhamento individualizado e evolua seus resultados na corrida. 
+            Cadastre-se para receber mais informações sobre a Assessoria Somma Club.
           </p>
 
           <Tabs defaultValue="development" className="w-full">
@@ -212,23 +211,24 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-12">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light mb-6 sm:mb-8 text-balance">
-              Para quem é o SOMMA Club?
+              Para quem é a Assessoria Somma?
             </h2>
 
             <div className="text-sm sm:text-base md:text-lg lg:text-xl text-zinc-300 leading-relaxed space-y-4 sm:space-y-6">
               <p>
-                O SOMMA Club é a comunidade para membros do nosso clube de corrida em Brasília. É para você que já é
-                parte da nossa família aos sábados e quer mais, e também para você que busca um incentivo para começar.
+                A Assessoria Somma é para corredores que desejam treinar com propósito e acompanhamento profissional.
+                Se você busca evoluir na corrida com planejamento individualizado, esta é a escolha certa.
               </p>
 
               <p>
-                Seja você um corredor iniciante, que ainda está descobrindo o prazer da corrida, ou um atleta experiente
-                em busca de novos desafios e conexões, aqui é o seu lugar.
+                Seja você um corredor iniciante buscando estrutura para começar de forma segura, ou um atleta
+                experiente querendo alcançar novos objetivos e melhorar sua performance, a Assessoria Somma oferece
+                o suporte necessário.
               </p>
 
               <p>
-                Se você valoriza a constância, acredita no poder da união e quer fazer parte de um movimento que vai
-                além do esporte, o SOMMA Club foi feito para você.
+                Se você valoriza treinos personalizados, acompanhamento técnico e quer fazer parte de uma comunidade
+                que leva a corrida a sério, a Assessoria Somma foi feita para você.
               </p>
             </div>
           </div>
@@ -240,23 +240,24 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-12">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light mb-6 sm:mb-8 text-balance">
-              Nossa Filosofia
+              Nossa Metodologia
             </h2>
 
             <div className="text-sm sm:text-base md:text-lg lg:text-xl text-zinc-300 leading-relaxed space-y-4 sm:space-y-6">
               <p>
-                No SOMMA, acreditamos que correr é um ato coletivo. Não se trata apenas de bater metas e quebrar
-                recordes, mas de compartilhar a jornada, celebrar cada conquista e apoiar uns aos outros.
+                Na Assessoria Somma, acreditamos em treinamento baseado em ciência e personalizado para cada atleta.
+                Não se trata apenas de correr mais, mas de treinar de forma inteligente, respeitando seus limites e
+                potencializando seus resultados.
               </p>
 
               <p>
-                Somos uma comunidade que encontra na corrida uma forma de cuidar da saúde, fortalecer laços e aproveitar
-                o melhor que a vida ao ar livre pode oferecer.
+                Nossa metodologia combina periodização, controle de cargas, análise de métricas e acompanhamento
+                individualizado para garantir evolução constante e segura.
               </p>
 
               <p className="font-light text-[#ff4f2d]">
-                Somos os "The Real Connection Runners". Aqui, a conversa flui para criar conexões verdadeiras,
-                compartilhar experiências e fortalecer nosso espírito de equipe.
+                Com integração de tecnologia via app, monitoramento Strava e feedback contínuo, você terá o suporte
+                necessário para alcançar seus objetivos na corrida.
               </p>
             </div>
           </div>
@@ -268,18 +269,20 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-12">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light mb-6 sm:mb-8 text-balance">
-              Como funciona a interação?
+              Como funciona o acompanhamento?
             </h2>
 
             <div className="text-sm sm:text-base md:text-lg lg:text-xl text-zinc-400 leading-relaxed space-y-4 sm:space-y-6">
               <p>
-                Ao se tornar membro do SOMMA Club, você terá acesso a um grupo exclusivo no WhatsApp. Este será nosso
-                ponto de encontro virtual, onde todos os membros, gestores e profissionais parceiros se conectam.
+                Na Assessoria Somma, você receberá seu planejamento de treinos semanalmente via aplicativo integrado.
+                Todo o acompanhamento é feito de forma digital, com análise das suas métricas, ajustes de plano e
+                feedback personalizado.
               </p>
 
               <p>
-                É lá que você ficará por dentro de todas as novidades, receberá dicas, participará de desafios e, claro,
-                combinará os próximos treinos e encontros.
+                Através da integração com Strava e relógios GPS, monitoramos sua evolução, ritmos, frequência cardíaca
+                e demais dados importantes para otimizar seus resultados. Você também terá acesso a um grupo exclusivo
+                para tirar dúvidas e interagir com outros assessorados.
               </p>
             </div>
           </div>
@@ -290,12 +293,12 @@ export default function Home() {
       <section className="relative z-20 py-12 sm:py-16 md:py-24">
         <div className="container p-4 sm:p-6 md:p-8 lg:p-12 rounded-xl sm:rounded-2xl z-50 bg-[#09090b] border border-zinc-800 mx-auto">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light text-white mb-4 sm:mb-6">
-            Vantagens de ser Membro
+            O que está incluído na Assessoria
           </h2>
 
           <p className="text-sm sm:text-base md:text-lg lg:text-xl text-zinc-400 mb-6 sm:mb-8 md:mb-12 leading-relaxed">
-            Ao se tornar membro do SOMMA Club, você terá acesso a um universo de benefícios pensados para potencializar
-            sua experiência como corredor e membro da nossa comunidade.
+            A Assessoria Somma oferece um conjunto completo de recursos e benefícios para sua evolução na corrida,
+            combinando tecnologia, acompanhamento profissional e vantagens exclusivas.
           </p>
 
           <div className="block lg:hidden space-y-3">

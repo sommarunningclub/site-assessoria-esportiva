@@ -11,22 +11,22 @@ const geist = Geist({ subsets: ["latin"], variable: "--font-geist" })
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" })
 
 export const metadata: Metadata = {
-  title: "Member Somma Club",
-  description: "Grupo Exclusivo de Membros para ajudar na sua performance.",
-  generator: "Somma Running Club",
+  title: "Assessoria Somma Club",
+  description: "Treinamento personalizado para corredores com acompanhamento profissional e planejamento individualizado.",
+  generator: "Assessoria Somma Club",
   icons: {
     icon: "https://cdn.shopify.com/s/files/1/0788/1932/8253/files/Favicon_Somma_club.svg?v=1769679872",
   },
   openGraph: {
-    title: "Member Somma Club",
-    description: "Grupo Exclusivo de Membros para ajudar na sua performance.",
+    title: "Assessoria Somma Club",
+    description: "Treinamento personalizado para corredores com acompanhamento profissional e planejamento individualizado.",
     type: "website",
     locale: "pt_BR",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Member Somma Club",
-    description: "Grupo Exclusivo de Membros para ajudar na sua performance.",
+    title: "Assessoria Somma Club",
+    description: "Treinamento personalizado para corredores com acompanhamento profissional e planejamento individualizado.",
   },
 }
 
