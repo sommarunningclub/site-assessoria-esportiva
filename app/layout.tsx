@@ -4,8 +4,6 @@ import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { LenisProvider } from "@/components/lenis-provider"
 import { Footer } from "@/components/footer"
-import { PasswordLock } from "@/components/password-lock" // Added import for PasswordLock
-
 import { CookieBanner } from "@/components/cookie-banner"
 import "./globals.css"
 
