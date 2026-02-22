@@ -5,34 +5,34 @@ import { ChevronDown } from "lucide-react"
 
 const faqs = [
   {
-    question: "Quanto tempo irá durar meu acesso? Tem fidelidade?",
+    question: "Quanto tempo dura a Assessoria? Tem fidelidade?",
     answer:
-      "O seu acesso ao SOMMA Club tem a duração do plano que você escolher, que pode ser mensal, trimestral, semestral ou anual. Não há nenhum tipo de fidelidade. Você tem total liberdade para fazer parte da nossa comunidade pelo tempo que fizer sentido para você.",
+      "A Assessoria Somma tem a duração do plano que você escolher: mensal, semestral ou anual. Não há fidelidade. Você tem liberdade para permanecer na assessoria pelo tempo que fizer sentido para seus objetivos.",
   },
   {
-    question: "Como acesso os benefícios do clube?",
+    question: "Como funciona o planejamento de treinos?",
     answer:
-      "Assim que sua assinatura for confirmada, você receberá um convite para entrar no nosso grupo exclusivo de membros no WhatsApp. É por lá que toda a mágica acontece: compartilhamos todas as informações, anunciamos os benefícios, organizamos os encontros e fortalecemos nossa comunidade.",
+      "Após a confirmação da sua assinatura, você receberá acesso ao aplicativo de treinamento onde seu plano personalizado será disponibilizado semanalmente. O planejamento é feito com base no seu nível atual, objetivos e disponibilidade de treino, com ajustes conforme sua evolução.",
   },
   {
     question: "Quais são as formas de pagamento? É seguro?",
     answer:
-      "Aceitamos pagamentos via Cartão de Crédito (com opção de parcelamento para planos longos) e PIX. Todo o processo de pagamento é gerenciado pela plataforma HUBLA, uma das mais seguras e confiáveis do mercado, garantindo total proteção aos seus dados.",
+      "Aceitamos pagamentos via Cartão de Crédito (com parcelamento nos planos semestrais e anuais). Todo o processo é seguro e protegido, garantindo total proteção aos seus dados.",
   },
   {
-    question: "Como funciona a garantia, cancelamento e reembolso?",
+    question: "Como funciona a garantia e o cancelamento?",
     answer:
-      "Sua satisfação é nossa prioridade. Ao assinar, você conta com uma garantia incondicional de 7 dias. Se por qualquer motivo você decidir que o clube não é para você nesse período, pode solicitar o cancelamento e o reembolso total do valor investido. Após os 7 dias, você pode cancelar a qualquer momento para evitar cobranças futuras, e seu acesso continuará ativo pelo período que já foi pago.",
+      "Ao assinar a Assessoria Somma, você tem 7 dias de garantia incondicional. Se não estiver satisfeito nesse período, pode solicitar cancelamento e reembolso total. Após os 7 dias, você pode cancelar a qualquer momento, e seu acesso continuará ativo pelo período já pago.",
   },
   {
     question: "A assinatura renova automaticamente?",
     answer:
-      "Sim. Para sua comodidade e para que você não perca o acesso aos benefícios, a renovação do seu plano é automática ao final do período contratado. Caso não deseje renovar, basta solicitar o cancelamento antes da data de renovação.",
+      "Sim. A renovação é automática ao final do período contratado para garantir continuidade no seu treinamento. Caso não deseje renovar, basta cancelar antes da data de renovação.",
   },
   {
-    question: "Posso cancelar minha assinatura?",
+    question: "Preciso de equipamentos especiais?",
     answer:
-      "Claro. O cancelamento é simples e pode ser feito a qualquer momento, diretamente na plataforma Hubla. Sem burocracia e sem perguntas. Você sempre estará no controle da sua assinatura.",
+      "Para aproveitar ao máximo a Assessoria, recomendamos o uso de um relógio GPS ou smartphone com app de corrida (como Strava) para registro dos treinos. Isso permite acompanhamento preciso das métricas e ajustes mais eficientes no planejamento.",
   },
 ]
 
@@ -48,8 +48,8 @@ export function FAQSection() {
           </h2>
 
           <p className="text-sm sm:text-base md:text-lg lg:text-xl text-zinc-400 mb-8 sm:mb-12 md:mb-16 leading-relaxed">
-            Tire suas dúvidas sobre o SOMMA Club e entenda como funciona a experiência de ser membro da nossa
-            comunidade.
+            Tire suas dúvidas sobre a Assessoria Somma e entenda como funciona o treinamento personalizado e
+            acompanhamento profissional.
           </p>
 
           <div className="space-y-3 sm:space-y-4">

@@ -9,7 +9,7 @@ export function Footer() {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6">
           {/* Left: Copyright and CNPJ */}
           <div className="text-center sm:text-left">
-            <p className="text-xs sm:text-sm font-light text-zinc-400">© 2025 SOMMA Running Club Membros</p>
+            <p className="text-xs sm:text-sm font-light text-zinc-400">© 2025 Assessoria Somma Club</p>
             <p className="text-xs sm:text-sm font-light text-zinc-500 mt-1">CNPJ 61.315.987/0001-28</p>
           </div>
 
