@@ -36,7 +36,7 @@ export default function Home() {
   }
 
   return (
-    <main className="relative min-h-[200vh] bg-black text-white overflow-hidden">
+    <main className="relative min-h-[200vh] bg-[#ff4f2d] text-white overflow-hidden">
       <Script
         src="https://unpkg.com/@splinetool/viewer@1.0.17/build/spline-viewer.js"
         type="module"
@@ -45,13 +45,12 @@ export default function Home() {
 
       <Navbar />
 
-      <div
-        className="fixed inset-0 z-0 w-screen h-screen pointer-events-none transition-all duration-100 hidden sm:block"
-        style={{
-          opacity: linesOpacity,
-          transform: `scale(${linesScale})`,
-        }}
-      >
+        <div
+          className="rounded-2xl border border-zinc-700 bg-zinc-900/80 backdrop-blur-sm p-8 sm:p-12"
+          style={{
+            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+          }}
+        >
         <div className="bg-lines-container">
           <svg
             xmlns="http://www.w3.org/2000/svg"
