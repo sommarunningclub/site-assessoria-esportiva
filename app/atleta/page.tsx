@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { ArrowRight } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 import { AtletaLoginModal } from "@/components/atleta-login-modal"
 
 export default function AtletaPage() {
@@ -12,8 +13,14 @@ export default function AtletaPage() {
     <main className="min-h-screen bg-black text-white">
       {/* Navigation */}
       <nav className="flex items-center justify-between px-4 sm:px-6 md:px-8 py-4 sm:py-6">
-        <Link href="/" className="text-lg sm:text-xl font-light hover:opacity-80 transition-opacity">
-          Assessoria Somma
+        <Link href="/" className="hover:opacity-80 transition-opacity">
+          <Image
+            src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/Stories_SOMMA_15_0ad925c6-c95b-430e-b715-26726e2a0c06.png?v=1771962276"
+            alt="Assessoria Somma"
+            width={120}
+            height={40}
+            className="h-10 w-auto object-contain"
+          />
         </Link>
         <Link href="/" className="text-xs sm:text-sm text-zinc-400 hover:text-white transition-colors">
           Voltar
