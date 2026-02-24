@@ -36,7 +36,7 @@ export default function Home() {
   }
 
   return (
-    <main className="relative min-h-[200vh] bg-[#ff4f2d] text-white overflow-hidden">
+    <main className="relative min-h-[200vh] bg-black text-white overflow-hidden">
       <Script
         src="https://unpkg.com/@splinetool/viewer@1.0.17/build/spline-viewer.js"
         type="module"
@@ -63,7 +63,7 @@ export default function Home() {
           >
             <path
               d="M510.086 0.543457L507.556 840.047C506.058 1337.18 318.091 1803.4 1.875 2094.29"
-              stroke="#ff4f2d"
+              stroke="#000000"
               strokeWidth="2"
               strokeMiterlimit="10"
               strokeDasharray="100px 99999px"
@@ -71,7 +71,7 @@ export default function Home() {
             />
             <path
               d="M929.828 0.543457L927.328 829.877C925.809 1334 737.028 1807.4 418.435 2106"
-              stroke="#ff4f2d"
+              stroke="#000000"
               strokeWidth="2"
               strokeMiterlimit="10"
               strokeDasharray="100px 99999px"
@@ -79,7 +79,7 @@ export default function Home() {
             />
             <path
               d="M1341.9 0.543457L1344.4 829.876C1345.92 1334 1534.7 1807.4 1853.29 2106"
-              stroke="#ff4f2d"
+              stroke="#000000"
               strokeWidth="2"
               strokeMiterlimit="10"
               strokeDasharray="100px 99999px"
@@ -87,7 +87,7 @@ export default function Home() {
             />
             <path
               d="M1758.96 0.543457L1761.49 840.047C1762.99 1337.18 1950.96 1803.4 2267.17 2094.29"
-              stroke="#ff4f2d"
+              stroke="#000000"
               strokeWidth="2"
               strokeMiterlimit="10"
               strokeDasharray="100px 99999px"
