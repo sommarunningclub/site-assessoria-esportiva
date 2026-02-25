@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { createClient } from "@/lib/supabase/server"
-import crypto from "crypto"
+import { createClient } from "@supabase/supabase-js"
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,9 +15,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "CPF inválido" }, { status: 400 })
     }
 
-    const supabase = await createClient()
-
     console.log("[v0] Buscando CPF:", cleanCPF)
+
+    // Usar service role para bypass de RLS
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+    if (!supabaseUrl || !serviceRoleKey) {
+      console.error("[v0] Missing Supabase credentials")
+      return NextResponse.json({ error: "Configuração de servidor inválida" }, { status: 500 })
+    }
+
+    const supabase = createClient(supabaseUrl, serviceRoleKey)
 
     // Buscar atleta na tabela "gestao-clientes-assessoria" pelo CPF
     const { data: athlete, error: fetchError } = await supabase
@@ -28,26 +36,29 @@ export async function POST(request: NextRequest) {
       .maybeSingle()
 
     if (fetchError) {
-      console.error("[v0] Supabase error:", fetchError?.message || "Unknown error")
-      return NextResponse.json({ error: "Erro ao buscar CPF. Tente novamente." }, { status: 500 })
+      console.error("[v0] Supabase error:", JSON.stringify(fetchError))
+      return NextResponse.json(
+        { error: "Erro ao buscar CPF. Verifique se a tabela existe." },
+        { status: 500 }
+      )
     }
 
     if (!athlete) {
       console.log("[v0] CPF não encontrado:", cleanCPF)
-      return NextResponse.json({ error: "CPF não encontrado. Verifique e tente novamente." }, { status: 401 })
+      return NextResponse.json(
+        { error: "CPF não encontrado. Verifique e tente novamente." },
+        { status: 401 }
+      )
     }
 
     console.log("[v0] Atleta encontrado")
-
-    // Criar session token
-    const sessionToken = crypto.randomBytes(32).toString("hex")
 
     // Criar response com cookie de sessão
     const response = NextResponse.json({
       success: true,
       athlete: {
         id: athlete.id,
-        name: athlete.nome,
+        name: athlete.nome || athlete.name || "Atleta",
         cpf: cleanCPF,
         email: athlete.email,
         subscription_status: athlete.status_assinatura,
@@ -56,7 +67,8 @@ export async function POST(request: NextRequest) {
     })
 
     // Adicionar cookie seguro com token de sessão
-    response.cookies.set("atleta_session", sessionToken, {
+    const token = Buffer.from(`${athlete.id}:${cleanCPF}`).toString("base64")
+    response.cookies.set("atleta_session", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
@@ -74,7 +86,7 @@ export async function POST(request: NextRequest) {
 
     return response
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : "Unknown error"
+    const errorMessage = error instanceof Error ? error.message : String(error)
     console.error("[v0] Login error:", errorMessage)
     return NextResponse.json({ error: "Erro ao processar login" }, { status: 500 })
   }
