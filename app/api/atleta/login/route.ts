@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { createClient } from "@supabase/supabase-js"
+import { createClient } from "@/lib/supabase/server"
 
 export async function POST(request: NextRequest) {
   try {
@@ -11,72 +11,44 @@ export async function POST(request: NextRequest) {
     }
 
     const cleanCPF = cpf.replace(/\D/g, "")
+    console.log("[v0] Login CPF recebido:", cleanCPF)
+
     if (cleanCPF.length !== 11) {
-      return NextResponse.json({ error: "CPF inválido" }, { status: 400 })
+      return NextResponse.json({ error: "CPF deve conter 11 dígitos" }, { status: 400 })
     }
 
-    console.log("[v0] Buscando CPF:", cleanCPF)
+    const supabase = await createClient()
 
-    // Usar service role para bypass de RLS
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-
-    if (!supabaseUrl || !serviceRoleKey) {
-      console.error("[v0] Missing Supabase credentials")
-      return NextResponse.json({ error: "Configuração de servidor inválida" }, { status: 500 })
-    }
-
-    const supabase = createClient(supabaseUrl, serviceRoleKey)
-
-    // Buscar atleta na tabela "gestao-clientes-assessoria" pelo CPF
-    const { data: athlete, error: fetchError } = await supabase
+    // Buscar na tabela gestao-clientes-assessoria
+    const { data, error } = await supabase
       .from("gestao-clientes-assessoria")
-      .select("*")
+      .select("id, cpf, nome, email")
       .eq("cpf", cleanCPF)
-      .maybeSingle()
+      .limit(1)
 
-    if (fetchError) {
-      console.error("[v0] Supabase error:", JSON.stringify(fetchError))
-      return NextResponse.json(
-        { error: "Erro ao buscar CPF. Verifique se a tabela existe." },
-        { status: 500 }
-      )
+    console.log("[v0] Query result - data:", data ? "encontrado" : "vazio", "error:", error ? "sim" : "não")
+
+    if (error) {
+      console.error("[v0] Erro na query:", error.message)
+      return NextResponse.json({ error: "Erro ao buscar dados" }, { status: 500 })
     }
 
-    if (!athlete) {
-      console.log("[v0] CPF não encontrado:", cleanCPF)
-      return NextResponse.json(
-        { error: "CPF não encontrado. Verifique e tente novamente." },
-        { status: 401 }
-      )
+    if (!data || data.length === 0) {
+      console.log("[v0] CPF não encontrado na base")
+      return NextResponse.json({ error: "CPF não encontrado" }, { status: 401 })
     }
 
-    console.log("[v0] Atleta encontrado")
+    const athlete = data[0]
+    console.log("[v0] CPF encontrado com sucesso")
 
-    // Criar response com cookie de sessão
+    // Login bem-sucedido
     const response = NextResponse.json({
       success: true,
-      athlete: {
-        id: athlete.id,
-        name: athlete.nome || athlete.name || "Atleta",
-        cpf: cleanCPF,
-        email: athlete.email,
-        subscription_status: athlete.status_assinatura,
-        subscription_plan: athlete.plano_assinatura,
-      },
+      message: "Login realizado com sucesso",
     })
 
-    // Adicionar cookie seguro com token de sessão
-    const token = Buffer.from(`${athlete.id}:${cleanCPF}`).toString("base64")
-    response.cookies.set("atleta_session", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 30 * 24 * 60 * 60, // 30 dias
-      path: "/",
-    })
-
-    response.cookies.set("atleta_id", athlete.id, {
+    // Salvar sessão no cookie
+    response.cookies.set("atleta_cpf", cleanCPF, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
@@ -86,8 +58,7 @@ export async function POST(request: NextRequest) {
 
     return response
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : String(error)
-    console.error("[v0] Login error:", errorMessage)
+    console.error("[v0] Login error:", error instanceof Error ? error.message : "unknown")
     return NextResponse.json({ error: "Erro ao processar login" }, { status: 500 })
   }
 }
