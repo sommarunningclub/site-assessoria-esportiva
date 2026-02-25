@@ -447,7 +447,7 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
                     }}
                     placeholder="Cupom de desconto"
                     className={`w-full pl-9 pr-3 py-2.5 bg-zinc-900/50 border rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none transition-colors ${
-                      couponError ? "border-red-500" : "border-zinc-800 focus:border-[#ff4f2d]"
+                      couponError ? "border-red-500" : "border-zinc-800 focus:border-zinc-600"
                     }`}
                   />
                 </div>
@@ -534,13 +534,13 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
                         required
                         value={customerData.postalCode}
                         onChange={(e) => handleCepChange(e.target.value)}
-                        className={`w-full px-3 py-2.5 bg-zinc-900/50 border rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none transition-colors ${
-                          cepError ? "border-red-500" : "border-zinc-800 focus:border-[#ff4f2d]"
-                        }`}
+                    className={`w-full px-3 py-2.5 bg-zinc-900/50 border rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none transition-colors ${
+                      cepError ? "border-red-500" : "border-zinc-800 focus:border-zinc-600"
+                    }`}
                         placeholder="CEP"
                       />
                       {isCepLoading && (
-                        <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#ff4f2d] animate-spin" />
+                        <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 animate-spin" />
                       )}
                     </div>
                     <div className="col-span-2">
@@ -549,7 +549,7 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
                         required
                         value={customerData.addressNumber}
                         onChange={(e) => setCustomerData({ ...customerData, addressNumber: e.target.value })}
-                        className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#ff4f2d] transition-colors"
+                    className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-600 transition-colors"
                         placeholder="Número"
                       />
                     </div>
@@ -620,19 +620,9 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
                     required
                     value={creditCardData.holderName}
                     onChange={(e) => setCreditCardData({ ...creditCardData, holderName: e.target.value.toUpperCase() })}
-                    className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#ff4f2d] transition-colors uppercase"
-                    placeholder="Nome no cartão"
+                    className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-600 transition-colors uppercase"
+                    placeholder="Titular do Cartão"
                   />
-
-                  <input
-                    type="text"
-                    required
-                    value={creditCardData.number}
-                    onChange={(e) => setCreditCardData({ ...creditCardData, number: formatCardNumber(e.target.value) })}
-                    className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#ff4f2d] transition-colors"
-                    placeholder="Número do cartão"
-                  />
-
                   <div className="grid grid-cols-3 gap-2">
                     <input
                       type="text"
@@ -642,7 +632,7 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
                       onChange={(e) =>
                         setCreditCardData({ ...creditCardData, expiryMonth: e.target.value.replace(/\D/g, "") })
                       }
-                      className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#ff4f2d] transition-colors text-center"
+                      className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-600 transition-colors text-center"
                       placeholder="MM"
                     />
                     <input
@@ -653,7 +643,7 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
                       onChange={(e) =>
                         setCreditCardData({ ...creditCardData, expiryYear: e.target.value.replace(/\D/g, "") })
                       }
-                      className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#ff4f2d] transition-colors text-center"
+                      className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-600 transition-colors text-center"
                       placeholder="AAAA"
                     />
                     <div className="relative">
@@ -665,7 +655,7 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
                         onChange={(e) =>
                           setCreditCardData({ ...creditCardData, ccv: e.target.value.replace(/\D/g, "") })
                         }
-                        className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#ff4f2d] transition-colors text-center"
+                        className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-600 transition-colors text-center"
                         placeholder="CVV"
                       />
                       <Lock className="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-600" />
@@ -693,7 +683,7 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3 bg-[#ff4f2d] hover:bg-[#e6452a] text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full py-3 bg-black hover:bg-zinc-900 text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -710,7 +700,7 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
           {/* Step: Processing */}
           {step === "processing" && (
             <div className="py-12 text-center">
-              <Loader2 className="w-12 h-12 text-[#ff4f2d] animate-spin mx-auto mb-4" />
+              <Loader2 className="w-12 h-12 text-zinc-500 animate-spin mx-auto mb-4" />
               <h3 className="text-lg font-medium text-white mb-2">Processando pagamento</h3>
               <p className="text-sm text-zinc-400">Aguarde enquanto confirmamos seu pagamento...</p>
             </div>
@@ -727,7 +717,7 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
                 Sua assinatura do {plan.name} foi ativada com sucesso.
               </p>
               <div className="bg-zinc-900/50 border border-zinc-800 rounded-lg p-4 mb-6 mx-4">
-                <p className="text-sm text-[#ff4f2d] font-medium mb-1">Próximos passos</p>
+                <p className="text-sm text-zinc-300 font-medium mb-1">Próximos passos</p>
                 <p className="text-sm text-zinc-300">
                   A equipe Somma Assessoria entrará em contato para o onboarding.
                 </p>
@@ -753,7 +743,7 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
               <div className="flex gap-3 justify-center">
                 <button
                   onClick={() => setStep("payment")}
-                  className="px-6 py-2.5 bg-[#ff4f2d] hover:bg-[#e6452a] text-white font-medium rounded-lg transition-colors"
+                  className="px-6 py-2.5 bg-black hover:bg-zinc-900 text-white font-medium rounded-lg transition-colors"
                 >
                   Tentar novamente
                 </button>
