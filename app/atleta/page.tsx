@@ -43,7 +43,7 @@ export default function AtletaPage() {
 
           <button
             onClick={() => setIsLoginOpen(true)}
-            className="inline-flex items-center gap-3 px-8 py-3.5 bg-[#ff4f2d] hover:bg-[#ff4f2d]/90 text-white font-medium rounded-lg transition-all group"
+            className="inline-flex items-center gap-3 px-8 py-3.5 bg-black hover:bg-zinc-900 text-white font-medium rounded-lg transition-all group border border-zinc-800"
           >
             Acessar Portal
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -103,7 +103,7 @@ export default function AtletaPage() {
           </p>
           <button
             onClick={() => setIsLoginOpen(true)}
-            className="inline-flex items-center gap-3 px-8 py-3.5 bg-[#ff4f2d] hover:bg-[#ff4f2d]/90 text-white font-medium rounded-lg transition-all group"
+            className="inline-flex items-center gap-3 px-8 py-3.5 bg-black hover:bg-zinc-900 text-white font-medium rounded-lg transition-all group border border-zinc-800"
           >
             Entrar no Portal
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />

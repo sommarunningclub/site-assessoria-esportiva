@@ -10,7 +10,6 @@ interface AtletaLoginModalProps {
 
 export function AtletaLoginModal({ isOpen, onClose }: AtletaLoginModalProps) {
   const [cpf, setCpf] = useState("")
-  const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
 
@@ -43,7 +42,7 @@ export function AtletaLoginModal({ isOpen, onClose }: AtletaLoginModalProps) {
       const response = await fetch("/api/atleta/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cpf: cpfNumbers, password }),
+        body: JSON.stringify({ cpf: cpfNumbers }),
       })
 
       const data = await response.json()
@@ -87,28 +86,16 @@ export function AtletaLoginModal({ isOpen, onClose }: AtletaLoginModalProps) {
               value={cpf}
               onChange={handleCPFChange}
               placeholder="000.000.000-00"
-              className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder:text-zinc-500 focus:outline-none focus:border-[#ff4f2d]"
+              className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder:text-zinc-500 focus:outline-none focus:border-zinc-600"
               disabled={isLoading}
               maxLength={14}
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-white mb-2">Senha</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Sua senha"
-              className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder:text-zinc-500 focus:outline-none focus:border-[#ff4f2d]"
-              disabled={isLoading}
-            />
-          </div>
-
           <button
             type="submit"
-            disabled={isLoading || !cpf || !password}
-            className="w-full mt-6 px-6 py-2.5 bg-[#ff4f2d] hover:bg-[#ff4f2d]/90 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-all flex items-center justify-center gap-2"
+            disabled={isLoading || !cpf}
+            className="w-full mt-6 px-6 py-2.5 bg-black hover:bg-zinc-900 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-all flex items-center justify-center gap-2 border border-zinc-800"
           >
             <LogIn className="w-4 h-4" />
             {isLoading ? "Conectando..." : "Entrar"}

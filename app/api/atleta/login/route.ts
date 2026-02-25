@@ -5,10 +5,10 @@ import crypto from "crypto"
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { cpf, password } = body
+    const { cpf } = body
 
-    if (!cpf || !password) {
-      return NextResponse.json({ error: "CPF e senha são obrigatórios" }, { status: 400 })
+    if (!cpf) {
+      return NextResponse.json({ error: "CPF é obrigatório" }, { status: 400 })
     }
 
     const cleanCPF = cpf.replace(/\D/g, "")
@@ -18,43 +18,31 @@ export async function POST(request: NextRequest) {
 
     const supabase = await createClient()
 
-    // Buscar atleta pelo CPF
+    // Buscar atleta na tabela "gestao-clientes-assessoria" pelo CPF
     const { data: athlete, error: fetchError } = await supabase
-      .from("athletes")
-      .select("id, cpf, name, email, subscription_status, subscription_plan")
+      .from("gestao-clientes-assessoria")
+      .select("id, cpf, nome, email, status_assinatura, plano_assinatura")
       .eq("cpf", cleanCPF)
       .single()
 
     if (fetchError || !athlete) {
-      return NextResponse.json({ error: "CPF ou senha inválidos" }, { status: 401 })
-    }
-
-    // Validação simples de senha (em produção, usar bcrypt)
-    // Por agora, usar hash do CPF como senha padrão para teste
-    const defaultPassword = crypto.createHash("sha256").update(`somma-${cleanCPF}`).digest("hex")
-    const inputHash = crypto.createHash("sha256").update(password).digest("hex")
-
-    if (inputHash !== defaultPassword && password !== process.env.ATLETA_MASTER_PASSWORD) {
-      return NextResponse.json({ error: "CPF ou senha inválidos" }, { status: 401 })
+      console.error("[v0] CPF not found or error:", fetchError)
+      return NextResponse.json({ error: "CPF não encontrado. Verifique e tente novamente." }, { status: 401 })
     }
 
     // Criar session token
     const sessionToken = crypto.randomBytes(32).toString("hex")
-    const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 dias
-
-    // Salvar sessão no Supabase (se tiver tabela de sessions)
-    // Por agora, usar cookie JWT
 
     // Criar response com cookie de sessão
     const response = NextResponse.json({
       success: true,
       athlete: {
         id: athlete.id,
-        name: athlete.name,
+        name: athlete.nome,
         cpf: cleanCPF,
         email: athlete.email,
-        subscription_status: athlete.subscription_status,
-        subscription_plan: athlete.subscription_plan,
+        subscription_status: athlete.status_assinatura,
+        subscription_plan: athlete.plano_assinatura,
       },
     })
 
