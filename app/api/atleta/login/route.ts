@@ -18,17 +18,26 @@ export async function POST(request: NextRequest) {
 
     const supabase = await createClient()
 
+    console.log("[v0] Buscando CPF:", cleanCPF)
+
     // Buscar atleta na tabela "gestao-clientes-assessoria" pelo CPF
     const { data: athlete, error: fetchError } = await supabase
       .from("gestao-clientes-assessoria")
-      .select("id, cpf, nome, email, status_assinatura, plano_assinatura")
+      .select("*")
       .eq("cpf", cleanCPF)
-      .single()
+      .maybeSingle()
 
-    if (fetchError || !athlete) {
-      console.error("[v0] CPF not found or error:", fetchError)
+    if (fetchError) {
+      console.error("[v0] Supabase error:", fetchError?.message || "Unknown error")
+      return NextResponse.json({ error: "Erro ao buscar CPF. Tente novamente." }, { status: 500 })
+    }
+
+    if (!athlete) {
+      console.log("[v0] CPF não encontrado:", cleanCPF)
       return NextResponse.json({ error: "CPF não encontrado. Verifique e tente novamente." }, { status: 401 })
     }
+
+    console.log("[v0] Atleta encontrado")
 
     // Criar session token
     const sessionToken = crypto.randomBytes(32).toString("hex")
@@ -65,7 +74,8 @@ export async function POST(request: NextRequest) {
 
     return response
   } catch (error) {
-    console.error("[v0] Login error:", error)
+    const errorMessage = error instanceof Error ? error.message : "Unknown error"
+    console.error("[v0] Login error:", errorMessage)
     return NextResponse.json({ error: "Erro ao processar login" }, { status: 500 })
   }
 }
