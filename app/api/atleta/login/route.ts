@@ -19,17 +19,38 @@ export async function POST(request: NextRequest) {
 
     const supabase = await createClient()
 
-    // Buscar na tabela gestao-clientes-assessoria
-    const { data, error } = await supabase
+    // Tentar diferentes nomes de tabela
+    let data = null
+    let error = null
+
+    // Primeiro tenta com hífens
+    const result1 = await supabase
       .from("gestao-clientes-assessoria")
       .select("id, cpf, nome, email")
       .eq("cpf", cleanCPF)
       .limit(1)
 
-    console.log("[v0] Query result - data:", data ? "encontrado" : "vazio", "error:", error ? "sim" : "não")
+    if (!result1.error) {
+      data = result1.data
+    } else {
+      // Tenta com underscores
+      const result2 = await supabase
+        .from("gestao_clientes_assessoria")
+        .select("id, cpf, nome, email")
+        .eq("cpf", cleanCPF)
+        .limit(1)
+
+      if (!result2.error) {
+        data = result2.data
+      } else {
+        error = result2.error
+      }
+    }
+
+    console.log("[v0] Query result - data encontrado:", !!data, "error:", !!error)
 
     if (error) {
-      console.error("[v0] Erro na query:", error.message)
+      console.error("[v0] Erro na query:", String(error).substring(0, 100))
       return NextResponse.json({ error: "Erro ao buscar dados" }, { status: 500 })
     }
 
