@@ -67,18 +67,6 @@ export function MobileMenu() {
 
               {/* Divider */}
               <div className="h-px bg-zinc-800 my-2" />
-
-              {/* Atleta Somma */}
-              <a
-                href="/atleta"
-                className="block px-4 py-3 text-sm text-white hover:bg-zinc-900/50 transition-colors"
-                onClick={closeMenu}
-              >
-                Atleta Somma
-              </a>
-
-              {/* Divider */}
-              <div className="h-px bg-zinc-800 my-2" />
               <a
                 href="https://wa.me/5561991780334?text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20o%20clube%20de%20membros%20do%20Somma."
                 target="_blank"

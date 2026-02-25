@@ -48,12 +48,6 @@ export function Navbar() {
         <div className="hidden md:flex items-center justify-end gap-2 sm:gap-4 flex-1 pr-2 sm:pr-4">
           <ResourcesDropdown />
           <a
-            href="/atleta"
-            className="px-3 sm:px-4 md:px-[18px] py-1.5 sm:py-2 md:py-[10px] rounded-full border border-zinc-600 bg-zinc-900/50 text-white font-medium text-xs sm:text-sm hover:scale-105 transition-transform duration-500"
-          >
-            Atleta Somma
-          </a>
-          <a
             href="https://wa.me/5561991780334?text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20o%20clube%20de%20membros%20do%20Somma."
             target="_blank"
             rel="noopener noreferrer"
