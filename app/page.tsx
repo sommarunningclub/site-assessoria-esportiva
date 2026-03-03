@@ -28,10 +28,10 @@ export default function Home() {
   const linesOpacity = 1 - scrollProgress
   const linesScale = 1 - scrollProgress * 0.3
 
-  const scrollToCapabilities = () => {
-    const capabilitiesSection = document.getElementById("capabilities")
-    if (capabilitiesSection) {
-      capabilitiesSection.scrollIntoView({ behavior: "smooth" })
+  const scrollToPricing = () => {
+    const pricingSection = document.getElementById("pricing")
+    if (pricingSection) {
+      pricingSection.scrollIntoView({ behavior: "smooth" })
     }
   }
 
@@ -166,17 +166,18 @@ export default function Home() {
           <div className="animate-fade-in-up animation-delay-400">
             <Button
               size="lg"
-              onClick={scrollToCapabilities}
+              onClick={scrollToPricing}
               className="group bg-[#ff4f2d] hover:bg-[#ff6647] text-white px-5 sm:px-6 md:px-8 py-3 sm:py-4 md:py-6 text-sm sm:text-base rounded-full transition-all duration-[650ms] hover:scale-[1.02] w-full sm:w-auto"
             >
-              Inscreva-se
+              Faça Parte
               <CircleArrowRight className="ml-2 h-4 sm:h-5 w-4 sm:w-5 transition-transform duration-[650ms] group-hover:rotate-90" />
             </Button>
           </div>
         </div>
       </div>
 
-      {/* Capabilities section with tabs */}
+      {/* Assessoria Esportiva Section - Hidden */}
+      {/* 
       <section id="capabilities" className="relative z-20 py-12 sm:py-16 md:py-24">
         <div className="container p-4 sm:p-6 md:p-8 lg:p-12 rounded-xl sm:rounded-2xl z-50 bg-[#09090b] border border-zinc-800 mx-auto">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light mb-4 sm:mb-6 text-balance">
@@ -202,6 +203,9 @@ export default function Home() {
               <SubscriptionForm />
             </TabsContent>
           </Tabs>
+        </div>
+      </section>
+      */}
         </div>
       </section>
 
@@ -438,7 +442,7 @@ export default function Home() {
       </section>
 
       {/* SOMMA Club Pricing Section */}
-      <section className="relative z-20 py-12 sm:py-16 md:py-20 lg:py-24">
+      <section id="pricing" className="relative z-20 py-12 sm:py-16 md:py-20 lg:py-24">
         <div className="container p-4 sm:p-6 md:p-8 lg:p-12 rounded-xl sm:rounded-2xl z-50 bg-[#09090b] border border-zinc-800 mx-auto">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light mb-3 sm:mb-4 md:mb-6 text-balance">
             Planos de Assinatura
