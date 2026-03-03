@@ -4,7 +4,6 @@ import { useState } from "react"
 import { Check, X } from "lucide-react"
 import Image from "next/image"
 import { CheckoutModal } from "./checkout-modal"
-import { PasswordProtectionModal } from "./password-protection-modal"
 
 const benefits = [
   { name: "Presença VIP nas provas Somma", membership: true, assessoria: true },
@@ -39,7 +38,6 @@ export function PricingPlans() {
   const [assessoriaPeriod, setAssessoriaPeriod] = useState<"mensal" | "semestral" | "anual">("semestral")
 
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
-  const [isPasswordOpen, setIsPasswordOpen] = useState(false)
   const [selectedPlan, setSelectedPlan] = useState<{
     name: string
     period: string
@@ -56,10 +54,6 @@ export function PricingPlans() {
   }
 
   const handleSubscribe = (planName: string, period: "mensal" | "semestral" | "anual") => {
-    // Primeiro, mostrar o modal de senha
-    setIsPasswordOpen(true)
-    
-    // Guardar os dados do plano para depois de verificada a senha
     const periodLabels = {
       mensal: "Mensal",
       semestral: "Semestral",
@@ -76,10 +70,7 @@ export function PricingPlans() {
       installments: priceData.installments,
       cycle: "MONTHLY",
     })
-  }
-
-  const handlePasswordSuccess = () => {
-    setIsPasswordOpen(false)
+    
     setIsCheckoutOpen(true)
   }
 
@@ -229,11 +220,6 @@ export function PricingPlans() {
 
       {selectedPlan && (
         <>
-          <PasswordProtectionModal
-            isOpen={isPasswordOpen}
-            onClose={() => setIsPasswordOpen(false)}
-            onSuccess={handlePasswordSuccess}
-          />
           <CheckoutModal isOpen={isCheckoutOpen} onClose={() => setIsCheckoutOpen(false)} plan={selectedPlan} />
         </>
       )}
