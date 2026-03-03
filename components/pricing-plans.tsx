@@ -77,7 +77,7 @@ export function PricingPlans() {
   const renderBenefitValue = (value: boolean | string) => {
     if (typeof value === "boolean") {
       return value ? (
-        <Check className="w-4 h-4 sm:w-5 sm:h-5 text-[#ff4f2d] mx-auto" />
+        <Check className="w-4 h-4 sm:w-5 sm:h-5 text-white mx-auto" />
       ) : (
         <X className="w-4 h-4 sm:w-5 sm:h-5 text-zinc-600 mx-auto" />
       )
@@ -90,9 +90,9 @@ export function PricingPlans() {
       {/* Plans Cards */}
       <div className="grid grid-cols-1 gap-4 sm:gap-6 md:gap-8 w-full">
         {/* Somma Assessoria Card */}
-        <div className="relative rounded-xl sm:rounded-2xl border border-[#ff4f2d]/50 bg-zinc-950/50 p-4 sm:p-6 md:p-8 hover:border-[#ff4f2d] transition-colors w-full">
+        <div className="relative rounded-xl sm:rounded-2xl border border-zinc-700 bg-zinc-950/50 p-4 sm:p-6 md:p-8 hover:border-zinc-600 transition-colors w-full">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
-            <span className="px-3 sm:px-4 py-0.5 sm:py-1 bg-[#ff4f2d] text-black text-[10px] sm:text-xs font-bold rounded-full whitespace-nowrap">
+            <span className="px-3 sm:px-4 py-0.5 sm:py-1 bg-black text-white text-[10px] sm:text-xs font-bold rounded-full whitespace-nowrap">
               PLANO PRINCIPAL
             </span>
           </div>
@@ -111,7 +111,7 @@ export function PricingPlans() {
                 key={period}
                 onClick={() => setAssessoriaPeriod(period)}
                 className={`flex-1 py-1.5 sm:py-2 px-2 sm:px-3 rounded text-[10px] sm:text-xs md:text-sm font-light transition-colors ${
-                  assessoriaPeriod === period ? "bg-[#ff4f2d] text-black" : "text-zinc-400 hover:text-white"
+                  assessoriaPeriod === period ? "bg-black text-white" : "text-zinc-400 hover:text-white"
                 }`}
               >
                 {period.charAt(0).toUpperCase() + period.slice(1)}
@@ -133,7 +133,7 @@ export function PricingPlans() {
                 <p className="text-sm text-zinc-400">
                   Total: <span className="text-white font-medium">R$ {assessoriaPrices[assessoriaPeriod].total.toFixed(2).replace(".", ",")}</span>
                 </p>
-                <p className="text-xs text-[#ff4f2d]">
+                <p className="text-xs text-zinc-400">
                   {assessoriaPrices[assessoriaPeriod].description}
                 </p>
               </div>
@@ -150,9 +150,9 @@ export function PricingPlans() {
             )}
           </div>
 
-          <button
+            <button
             onClick={() => handleSubscribe("Somma Assessoria", assessoriaPeriod)}
-            className="w-full py-2.5 sm:py-3 md:py-4 px-4 rounded-lg bg-[#ff4f2d] text-black font-light hover:bg-[#ff6647] transition-colors text-sm sm:text-base"
+            className="w-full py-2.5 sm:py-3 md:py-4 px-4 rounded-lg bg-black hover:bg-zinc-900 text-white font-light transition-colors text-sm sm:text-base"
           >
             Assinar Agora
           </button>
@@ -189,7 +189,7 @@ export function PricingPlans() {
                             href={benefit.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="hover:text-[#ff4f2d] transition-colors underline underline-offset-2"
+                            className="hover:text-white transition-colors underline underline-offset-2"
                           >
                             {benefit.name}
                           </a>

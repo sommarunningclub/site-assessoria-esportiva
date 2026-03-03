@@ -207,7 +207,7 @@ export function SubscriptionForm() {
             onChange={handleChange}
             required
             placeholder="seu@email.com"
-            className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-zinc-950 border border-zinc-800 rounded-lg text-white text-sm placeholder-zinc-500 focus:outline-none focus:border-[#ff4f2d] focus:ring-1 focus:ring-[#ff4f2d] transition-all"
+            className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-zinc-950 border border-zinc-800 rounded-lg text-white text-sm placeholder-zinc-500 focus:outline-none focus:border-zinc-600 focus:ring-1 focus:ring-zinc-600 transition-all"
           />
         </div>
 
@@ -228,7 +228,7 @@ export function SubscriptionForm() {
             className={`w-full px-3 sm:px-4 py-2 sm:py-3 bg-zinc-950 border rounded-lg text-white text-sm placeholder-zinc-500 focus:outline-none transition-all ${
               whatsappError
                 ? "border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500"
-                : "border-zinc-800 focus:border-[#ff4f2d] focus:ring-1 focus:ring-[#ff4f2d]"
+                : "border-zinc-800 focus:border-zinc-600 focus:ring-1 focus:ring-zinc-600"
             }`}
           />
           {whatsappError && <p className="text-red-500 text-xs mt-1">{whatsappError}</p>}
@@ -245,7 +245,7 @@ export function SubscriptionForm() {
             value={formData.sexo}
             onChange={handleChange}
             required
-            className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-zinc-950 border border-zinc-800 rounded-lg text-white text-sm focus:outline-none focus:border-[#ff4f2d] focus:ring-1 focus:ring-[#ff4f2d] transition-all appearance-none cursor-pointer"
+            className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-zinc-950 border border-zinc-800 rounded-lg text-white text-sm focus:outline-none focus:border-zinc-600 focus:ring-1 focus:ring-zinc-600 transition-all appearance-none cursor-pointer"
           >
             <option value="">Selecione</option>
             <option value="feminino">Feminino</option>
@@ -264,7 +264,7 @@ export function SubscriptionForm() {
             value={formData.cidade}
             onChange={handleChange}
             required
-            className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-zinc-950 border border-zinc-800 rounded-lg text-white text-sm focus:outline-none focus:border-[#ff4f2d] focus:ring-1 focus:ring-[#ff4f2d] transition-all appearance-none cursor-pointer"
+            className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-zinc-950 border border-zinc-800 rounded-lg text-white text-sm focus:outline-none focus:border-zinc-600 focus:ring-1 focus:ring-zinc-600 transition-all appearance-none cursor-pointer"
           >
             <option value="">Selecione uma cidade</option>
             {CITIES.map((city) => (
@@ -279,7 +279,7 @@ export function SubscriptionForm() {
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-[#ff4f2d] hover:bg-[#ff6647] text-white py-2 sm:py-3 rounded-lg font-light text-sm sm:text-base transition-all duration-300 mt-6 sm:mt-8"
+          className="w-full bg-black hover:bg-zinc-900 text-white py-2 sm:py-3 rounded-lg font-light text-sm sm:text-base transition-all duration-300 mt-6 sm:mt-8"
         >
           {isSubmitting ? "Inscrevendo..." : "Inscreva-se no SOMMA Club"}
         </Button>

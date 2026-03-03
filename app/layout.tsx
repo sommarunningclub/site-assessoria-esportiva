@@ -5,7 +5,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { LenisProvider } from "@/components/lenis-provider"
 import { Footer } from "@/components/footer"
 import { CookieBanner } from "@/components/cookie-banner"
-import "../styles/globals.css"
+import "./globals.css"
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" })
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" })

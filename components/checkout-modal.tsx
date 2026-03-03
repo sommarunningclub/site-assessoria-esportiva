@@ -3,6 +3,7 @@
 import type React from "react"
 import { useState, useEffect } from "react"
 import { X, CreditCard, Loader2, Check, AlertCircle, Lock, MapPin, ChevronLeft, ShieldCheck, Tag } from "lucide-react"
+import { validators } from "@/lib/validators"
 
 interface CheckoutModalProps {
   isOpen: boolean
@@ -186,16 +187,32 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
 
   const fetchAddressByCep = async (cep: string) => {
     const cleanCep = cep.replace(/\D/g, "")
-    if (cleanCep.length !== 8) return
+    if (cleanCep.length !== 8) {
+      setCepError("CEP deve conter 8 dígitos")
+      return
+    }
 
     setIsCepLoading(true)
     setCepError(null)
 
     try {
       const response = await fetch(`https://brasilapi.com.br/api/cep/v2/${cleanCep}`)
-      if (!response.ok) throw new Error("CEP não encontrado")
+      if (!response.ok) {
+        if (response.status === 404) {
+          setCepError("CEP não encontrado. Verifique e tente novamente.")
+        } else {
+          setCepError("Erro ao buscar CEP. Tente novamente.")
+        }
+        return
+      }
 
       const data: CepResponse = await response.json()
+      
+      if (!data.city || !data.state) {
+        setCepError("CEP inválido ou não encontrado")
+        return
+      }
+
       setCustomerData((prev) => ({
         ...prev,
         street: data.street || "",
@@ -203,8 +220,9 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
         city: data.city || "",
         state: data.state || "",
       }))
-    } catch {
-      setCepError("CEP não encontrado")
+    } catch (err) {
+      console.error("[v0] CEP fetch error:", err)
+      setCepError("Erro ao buscar CEP. Tente novamente.")
     } finally {
       setIsCepLoading(false)
     }
@@ -258,8 +276,45 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
 
   const handleCustomerSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
     setError(null)
+
+    // Validações
+    const nameValidation = validators.name(customerData.name)
+    if (!nameValidation.valid) {
+      setError(nameValidation.message)
+      return
+    }
+
+    const emailValidation = validators.email(customerData.email)
+    if (!emailValidation.valid) {
+      setError(emailValidation.message)
+      return
+    }
+
+    const cpfValidation = validators.cpf(customerData.cpfCnpj)
+    if (!cpfValidation.valid) {
+      setError(cpfValidation.message)
+      return
+    }
+
+    const phoneValidation = validators.phone(customerData.phone)
+    if (!phoneValidation.valid) {
+      setError(phoneValidation.message)
+      return
+    }
+
+    const cepValidation = validators.cep(customerData.postalCode)
+    if (!cepValidation.valid) {
+      setError(cepValidation.message)
+      return
+    }
+
+    if (!customerData.addressNumber.trim()) {
+      setError("Número do endereço é obrigatório")
+      return
+    }
+
+    setIsLoading(true)
 
     try {
       const response = await fetch("/api/asaas/customer", {
@@ -282,17 +337,43 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
 
   const handlePaymentSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
     setError(null)
+
+    // Validações de cartão
+    const cardNumberValidation = validators.cardNumber(creditCardData.number)
+    if (!cardNumberValidation.valid) {
+      setError(cardNumberValidation.message)
+      return
+    }
+
+    const cardExpiryValidation = validators.cardExpiry(creditCardData.expiryMonth, creditCardData.expiryYear)
+    if (!cardExpiryValidation.valid) {
+      setError(cardExpiryValidation.message)
+      return
+    }
+
+    const cardCvvValidation = validators.cardCvv(creditCardData.ccv)
+    if (!cardCvvValidation.valid) {
+      setError(cardCvvValidation.message)
+      return
+    }
+
+    const holderNameValidation = validators.name(creditCardData.holderName)
+    if (!holderNameValidation.valid) {
+      setError("Nome do titular deve ter pelo menos 3 caracteres")
+      return
+    }
+
+    setIsLoading(true)
     setStep("processing")
 
     try {
       const subscriptionPayload: any = {
         customerId,
         billingType: "CREDIT_CARD",
-        value: discountedPrice, // Usar preço com desconto se houver cupom
+        value: discountedPrice,
         cycle: "MONTHLY",
-        maxPayments: plan.installments > 1 ? plan.installments : undefined, // Se for semestral (6) ou anual (12), limita as parcelas
+        maxPayments: plan.installments > 1 ? plan.installments : undefined,
         description: `${plan.name} - ${plan.period}${couponData ? ` (Cupom: ${couponData.coupon.code})` : ""}`,
         creditCard: {
           holderName: creditCardData.holderName,
@@ -485,7 +566,7 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
                     required
                     value={customerData.name}
                     onChange={(e) => setCustomerData({ ...customerData, name: e.target.value })}
-                    className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#ff4f2d] transition-colors"
+                    className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-600 transition-colors"
                     placeholder="Nome completo"
                   />
 
@@ -494,7 +575,7 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
                     required
                     value={customerData.email}
                     onChange={(e) => setCustomerData({ ...customerData, email: e.target.value })}
-                    className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#ff4f2d] transition-colors"
+                    className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-600 transition-colors"
                     placeholder="E-mail"
                   />
 
@@ -504,7 +585,7 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
                       required
                       value={customerData.cpfCnpj}
                       onChange={(e) => setCustomerData({ ...customerData, cpfCnpj: formatCPF(e.target.value) })}
-                      className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#ff4f2d] transition-colors"
+                      className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-600 transition-colors"
                       placeholder="CPF"
                     />
 
@@ -513,7 +594,7 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
                       required
                       value={customerData.phone}
                       onChange={(e) => setCustomerData({ ...customerData, phone: formatPhone(e.target.value) })}
-                      className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#ff4f2d] transition-colors"
+                      className="w-full px-3 py-2.5 bg-zinc-900/50 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-600 transition-colors"
                       placeholder="WhatsApp"
                     />
                   </div>
@@ -591,7 +672,7 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
               <button
                 type="submit"
                 disabled={isLoading || !customerData.street}
-                className="w-full py-3 bg-[#ff4f2d] hover:bg-[#e6452a] text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full py-3 bg-black hover:bg-zinc-900 text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -702,7 +783,10 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
             <div className="py-12 text-center">
               <Loader2 className="w-12 h-12 text-zinc-500 animate-spin mx-auto mb-4" />
               <h3 className="text-lg font-medium text-white mb-2">Processando pagamento</h3>
-              <p className="text-sm text-zinc-400">Aguarde enquanto confirmamos seu pagamento...</p>
+              <p className="text-sm text-zinc-400 mb-4">Aguarde enquanto confirmamos seu pagamento...</p>
+              <div className="w-full bg-zinc-800 rounded-full h-1 overflow-hidden">
+                <div className="bg-white h-full w-full animate-pulse"></div>
+              </div>
             </div>
           )}
 
@@ -739,17 +823,26 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
               </div>
               <h3 className="text-lg font-medium text-white mb-2">Erro no pagamento</h3>
               <p className="text-sm text-zinc-400 mb-2">{error || "Ocorreu um erro ao processar seu pagamento."}</p>
-              <p className="text-xs text-zinc-500 mb-6">Verifique os dados do cartão e tente novamente.</p>
-              <div className="flex gap-3 justify-center">
+              <p className="text-xs text-zinc-500 mb-6">Verifique os dados e tente novamente.</p>
+              <div className="flex flex-col gap-3 justify-center">
                 <button
                   onClick={() => setStep("payment")}
-                  className="px-6 py-2.5 bg-black hover:bg-zinc-900 text-white font-medium rounded-lg transition-colors"
+                  className="px-6 py-2.5 bg-black hover:bg-zinc-900 text-white font-medium rounded-lg transition-colors disabled:opacity-50"
+                  disabled={isLoading}
                 >
                   Tentar novamente
                 </button>
                 <button
+                  onClick={() => setStep("customer")}
+                  className="px-6 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50"
+                  disabled={isLoading}
+                >
+                  Voltar aos dados
+                </button>
+                <button
                   onClick={onClose}
-                  className="px-6 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-white font-medium rounded-lg transition-colors"
+                  className="px-6 py-2.5 bg-zinc-900 hover:bg-zinc-800 text-white font-medium rounded-lg transition-colors disabled:opacity-50"
+                  disabled={isLoading}
                 >
                   Fechar
                 </button>

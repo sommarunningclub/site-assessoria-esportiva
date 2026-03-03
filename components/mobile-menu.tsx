@@ -84,12 +84,12 @@ export function MobileMenu() {
               <div className="px-3 pb-2">
                 <button
                   onClick={() => {
-                    document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" })
+                    document.getElementById("capabilities")?.scrollIntoView({ behavior: "smooth" })
                     closeMenu()
                   }}
                   className="w-full py-2.5 text-sm font-medium text-white bg-[#ff4f2d] hover:bg-[#ff5e3f] rounded-lg transition-colors"
                 >
-                  Faça Parte
+                  Inscreva-se
                 </button>
               </div>
             </div>
