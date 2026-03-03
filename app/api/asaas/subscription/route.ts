@@ -5,6 +5,15 @@ const ASAAS_API_KEY = process.env.ASAAS_API_KEY
 
 export async function POST(request: NextRequest) {
   try {
+    // Validar que a chave de API está configurada
+    if (!ASAAS_API_KEY) {
+      console.error("[Asaas] ASAAS_API_KEY não está configurada")
+      return NextResponse.json(
+        { error: "Chave de API do ASAAS não configurada" },
+        { status: 500 },
+      )
+    }
+
     const body = await request.json()
     const { customerId, billingType, value, cycle, description, creditCard, creditCardHolderInfo, remoteIp, maxPayments } = body
 
@@ -29,7 +38,7 @@ export async function POST(request: NextRequest) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        access_token: ASAAS_API_KEY || "",
+        access_token: ASAAS_API_KEY,
       },
       body: JSON.stringify(paymentData),
     })
