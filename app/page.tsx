@@ -107,11 +107,19 @@ export default function Home() {
                 </p>
               </div>
               <div className="relative h-72 md:h-96 border border-white/10 rounded-sm overflow-hidden">
+                {/* Mobile Image */}
                 <Image
-                  src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/IMG_1479_JPG.jpg?v=1772326757"
-                  alt="Corredores Iniciantes"
+                  src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/Design_sem_nome_27.png?v=1772737814"
+                  alt="Corredores Iniciantes - Mobile"
                   fill
-                  className="object-cover object-center"
+                  className="object-cover object-center block md:hidden"
+                />
+                {/* Desktop Image */}
+                <Image
+                  src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/Design_sem_nome_26.png?v=1772737763"
+                  alt="Corredores Iniciantes - Desktop"
+                  fill
+                  className="object-cover object-center hidden md:block"
                 />
               </div>
             </div>
