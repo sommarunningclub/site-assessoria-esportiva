@@ -28,32 +28,32 @@ export function Navbar() {
 
   return (
     <nav
-      className={`fixed left-1/2 -translate-x-1/2 z-50 px-3 sm:px-4 md:px-6 w-full max-w-7xl transition-all duration-700 ease-in-out ${
-        isVisible ? "top-3 sm:top-4 md:top-8 opacity-100" : "-top-24 opacity-0"
+      className={`fixed left-1/2 -translate-x-1/2 z-50 w-full px-4 sm:px-6 lg:px-12 transition-all duration-700 ease-in-out ${
+        isVisible ? "top-0 opacity-100" : "-top-24 opacity-0"
       }`}
     >
-      <div className="bg-black/50 backdrop-blur-[120px] rounded-full px-3 sm:px-4 md:px-8 py-2 sm:py-2.5 md:py-3 flex items-center gap-3 sm:gap-4 md:gap-8 shadow-lg border border-white/10 w-full">
-        {/* Logo - smaller on mobile */}
+      <div className="h-20 flex items-center justify-between border-b border-white/10 bg-black/50 backdrop-blur-md">
+        {/* Logo */}
         <div className="flex items-center flex-shrink-0">
           <Image
             src="/webrenew-brandmark.png"
             alt="SOMMA Club"
             width={225}
             height={48}
-            className="h-6 sm:h-8 md:h-10 lg:h-12 w-auto"
+            className="h-6 sm:h-8 lg:h-10 w-auto invert"
           />
         </div>
 
-        {/* Desktop Menu Links */}
-        <div className="hidden md:flex items-center justify-end gap-2 sm:gap-4 flex-1 pr-2 sm:pr-4">
+        {/* Desktop Menu */}
+        <div className="hidden md:flex items-center justify-end gap-8 flex-1">
           <ResourcesDropdown />
           <a
-            href="https://wa.me/5561991780334?text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20o%20clube%20de%20membros%20do%20Somma."
+            href="https://wa.me/5561991780334?text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20a%20Assessoria%20Somma."
             target="_blank"
             rel="noopener noreferrer"
-            className="px-3 sm:px-4 md:px-[18px] py-1.5 sm:py-2 md:py-[10px] rounded-full border border-[#ff4f2d] bg-[#ff4f2d]/50 text-white font-medium text-xs sm:text-sm hover:scale-105 transition-transform duration-500"
+            className="text-white hover:text-[#ff4f2d] transition-colors text-xs sm:text-sm font-light"
           >
-            Contato
+            Contato ↗
           </a>
         </div>
 
