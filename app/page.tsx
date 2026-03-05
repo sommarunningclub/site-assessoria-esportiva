@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { PricingPlans } from "@/components/pricing-plans"
 import { Navbar } from "@/components/navbar"
@@ -105,7 +106,13 @@ export default function Home() {
                   Buscando estrutura para começar de forma segura, com planejamento individualizado que respeita seus limites.
                 </p>
               </div>
-              <div className="h-64 md:h-80 bg-white/5 border border-white/10 rounded-sm" />
+              <Image
+                src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/IMG_1479_JPG.jpg?v=1772326757"
+                alt="Corredores Iniciantes"
+                width={500}
+                height={400}
+                className="h-64 md:h-80 w-full object-cover border border-white/10 rounded-sm"
+              />
             </div>
 
             {/* Item 02 */}
