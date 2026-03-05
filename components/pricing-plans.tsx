@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { Check } from "lucide-react"
 import { CheckoutModal } from "./checkout-modal"
-import { PasswordProtectionModal } from "./password-protection-modal"
 
 const benefits = [
   { category: "Comunidade", items: ["Presença VIP nas provas Somma", "Estrutura Somma em eventos", "Encontros mensais exclusivos", "Corridas temáticas", "Palestras e experiências"] },
@@ -42,7 +41,6 @@ const pricingPlans = [
 
 export function PricingPlans() {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
-  const [isPasswordOpen, setIsPasswordOpen] = useState(false)
   const [selectedPlan, setSelectedPlan] = useState<{
     name: string
     period: string
@@ -53,8 +51,6 @@ export function PricingPlans() {
   } | null>(null)
 
   const handleSubscribe = (plan: (typeof pricingPlans)[0]) => {
-    setIsPasswordOpen(true)
-
     setSelectedPlan({
       name: `Somma Assessoria - ${plan.name}`,
       period: plan.name,
@@ -63,10 +59,6 @@ export function PricingPlans() {
       installments: plan.installments || 1,
       cycle: "MONTHLY",
     })
-  }
-
-  const handlePasswordSuccess = () => {
-    setIsPasswordOpen(false)
     setIsCheckoutOpen(true)
   }
 
@@ -208,14 +200,7 @@ export function PricingPlans() {
 
       {/* Modals */}
       {selectedPlan && (
-        <>
-          <PasswordProtectionModal
-            isOpen={isPasswordOpen}
-            onClose={() => setIsPasswordOpen(false)}
-            onSuccess={handlePasswordSuccess}
-          />
-          <CheckoutModal isOpen={isCheckoutOpen} onClose={() => setIsCheckoutOpen(false)} plan={selectedPlan} />
-        </>
+        <CheckoutModal isOpen={isCheckoutOpen} onClose={() => setIsCheckoutOpen(false)} plan={selectedPlan} />
       )}
     </div>
   )
