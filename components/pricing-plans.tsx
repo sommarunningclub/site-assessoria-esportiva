@@ -1,8 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import Link from "next/link"
 import { Check } from "lucide-react"
-import { CheckoutModal } from "./checkout-modal"
 
 const benefits = [
   { category: "Comunidade", items: ["Presença VIP nas provas Somma", "Estrutura Somma em eventos", "Encontros mensais exclusivos", "Corridas temáticas", "Palestras e experiências"] },
@@ -40,27 +39,6 @@ const pricingPlans = [
 ]
 
 export function PricingPlans() {
-  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
-  const [selectedPlan, setSelectedPlan] = useState<{
-    name: string
-    period: string
-    price: number
-    totalPrice: number
-    installments: number
-    cycle: "MONTHLY"
-  } | null>(null)
-
-  const handleSubscribe = (plan: (typeof pricingPlans)[0]) => {
-    setSelectedPlan({
-      name: `Somma Assessoria - ${plan.name}`,
-      period: plan.name,
-      price: plan.price,
-      totalPrice: plan.total || plan.price,
-      installments: plan.installments || 1,
-      cycle: "MONTHLY",
-    })
-    setIsCheckoutOpen(true)
-  }
 
   return (
     <div className="space-y-20 md:space-y-32">
@@ -142,12 +120,12 @@ export function PricingPlans() {
               </div>
 
               {/* CTA Button */}
-              <button
-                onClick={() => handleSubscribe(plan)}
-                className="w-full py-3 px-4 bg-[#ff4f2d] text-black hover:bg-[#ff6647] transition-colors text-sm font-light uppercase tracking-wider"
+              <Link
+                href={`/checkout/${plan.period.toLowerCase()}`}
+                className="block w-full py-3 px-4 bg-[#ff4f2d] text-black hover:bg-[#ff6647] transition-colors text-sm font-light uppercase tracking-wider text-center"
               >
                 Assinar
-              </button>
+              </Link>
             </div>
           ))}
         </div>
@@ -198,10 +176,6 @@ export function PricingPlans() {
         </div>
       </div>
 
-      {/* Modals */}
-      {selectedPlan && (
-        <CheckoutModal isOpen={isCheckoutOpen} onClose={() => setIsCheckoutOpen(false)} plan={selectedPlan} />
-      )}
     </div>
   )
 }
