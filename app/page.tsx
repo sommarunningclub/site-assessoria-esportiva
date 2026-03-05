@@ -111,7 +111,7 @@ export default function Home() {
                   src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/IMG_1479_JPG.jpg?v=1772326757"
                   alt="Corredores Iniciantes"
                   fill
-                  className="object-cover object-top"
+                  className="object-cover object-center"
                 />
               </div>
             </div>
