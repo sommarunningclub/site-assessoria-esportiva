@@ -36,11 +36,11 @@ export function Navbar() {
         {/* Logo */}
         <div className="flex items-center flex-shrink-0">
           <Image
-            src="/webrenew-brandmark.png"
+            src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/HORIZONTAL_PRETA_LARANJA_018e2e24-ea42-4dcd-a66a-17088e6e121e.png?v=1772736127"
             alt="SOMMA Club"
-            width={225}
-            height={48}
-            className="h-6 sm:h-8 lg:h-10 w-auto invert"
+            width={180}
+            height={40}
+            className="h-6 sm:h-7 lg:h-8 w-auto"
           />
         </div>
 
