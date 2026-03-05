@@ -36,9 +36,9 @@ export function Navbar() {
         {/* Logo */}
         <div className="flex items-center flex-shrink-0">
           <Image
-            src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/HORIZONTAL_PRETA_LARANJA_018e2e24-ea42-4dcd-a66a-17088e6e121e.png?v=1772736127"
+            src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/Logo_Nova_Somma_Branca_Laranja.svg?v=1772736456"
             alt="SOMMA Club"
-            width={180}
+            width={150}
             height={40}
             className="h-6 sm:h-7 lg:h-8 w-auto"
           />
