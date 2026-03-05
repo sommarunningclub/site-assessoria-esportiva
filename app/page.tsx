@@ -106,13 +106,13 @@ export default function Home() {
                   Buscando estrutura para começar de forma segura, com planejamento individualizado que respeita seus limites.
                 </p>
               </div>
-              <div className="relative h-72 md:h-96 border border-white/10 rounded-sm overflow-hidden">
+              <div className="relative h-96 md:h-96 border border-white/10 rounded-sm overflow-hidden bg-white/5">
                 {/* Mobile Image */}
                 <Image
                   src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/Design_sem_nome_27.png?v=1772737814"
                   alt="Corredores Iniciantes - Mobile"
                   fill
-                  className="object-cover object-center block md:hidden"
+                  className="object-contain object-center block md:hidden"
                 />
                 {/* Desktop Image */}
                 <Image
