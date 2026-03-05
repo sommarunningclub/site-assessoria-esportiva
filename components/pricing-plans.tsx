@@ -1,35 +1,46 @@
 "use client"
 
 import { useState } from "react"
-import { Check, X } from "lucide-react"
+import { Check } from "lucide-react"
 import { CheckoutModal } from "./checkout-modal"
 import { PasswordProtectionModal } from "./password-protection-modal"
 
 const benefits = [
-  { name: "Presença VIP nas provas Somma", assessoria: true },
-  { name: "Estrutura Somma em eventos", assessoria: true },
-  { name: "Descontos em parceiros Somma", assessoria: true },
-  { name: "Track&Field", assessoria: true },
-  { name: "Tex Barbearia", assessoria: true },
-  { name: "Dopahmina", assessoria: true, link: "https://www.instagram.com/dopahmina/" },
-  { name: "Academia Evolve", assessoria: true, link: "https://academiaevolve.com.br/" },
-  { name: "Bugu Delicias", assessoria: true, link: "https://www.instagram.com/bugu_delicias/" },
-  { name: "Marcas de suplementos", assessoria: true },
-  { name: "Sorteios mensais", assessoria: true },
-  { name: "Encontros mensais exclusivos", assessoria: true },
-  { name: "Corridas temáticas nos encontros", assessoria: true },
-  { name: "Palestras e experiências nos encontros", assessoria: true },
-  { name: "Treinamento personalizado via app", assessoria: true },
-  { name: "Integração com Strava e relógios GPS", assessoria: true },
-  { name: "Acompanhamento de métricas de performance", assessoria: true },
-  { name: "Camiseta oficial de membro (semestral/anual)", assessoria: "Sim" },
-  { name: "Camiseta exclusiva da Assessoria", assessoria: true },
-  { name: "Desconto para camisetas extras", assessoria: "50%" },
+  { category: "Comunidade", items: ["Presença VIP nas provas Somma", "Estrutura Somma em eventos", "Encontros mensais exclusivos", "Corridas temáticas", "Palestras e experiências"] },
+  { category: "Parcerias", items: ["Descontos em Track&Field", "Descontos em Tex Barbearia", "Descontos em Dopahmina", "Descontos em Academia Evolve", "Descontos em Bugu Delícias", "Descontos em marcas de suplementos"] },
+  { category: "Exclusivos", items: ["Treinamento personalizado via app", "Integração com Strava e relógios GPS", "Acompanhamento de métricas", "Camiseta oficial de membro", "Desconto em camisetas extras"] },
+  { category: "Sorteios", items: ["Sorteios mensais com prêmios especiais"] },
+]
+
+const pricingPlans = [
+  {
+    name: "Mensal",
+    price: 220,
+    period: "mensal",
+    description: "Cobrança mensal recorrente",
+    savings: null,
+  },
+  {
+    name: "Semestral",
+    price: 200,
+    total: 1200,
+    period: "semestral",
+    installments: 6,
+    description: "6x R$ 200,00 sem juros",
+    savings: "R$ 120 de economia",
+  },
+  {
+    name: "Anual",
+    price: 180,
+    total: 2160,
+    period: "anual",
+    installments: 12,
+    description: "12x R$ 180,00 sem juros",
+    savings: "R$ 480 de economia",
+  },
 ]
 
 export function PricingPlans() {
-  const [assessoriaPeriod, setAssessoriaPeriod] = useState<"mensal" | "semestral" | "anual">("semestral")
-
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
   const [isPasswordOpen, setIsPasswordOpen] = useState(false)
   const [selectedPlan, setSelectedPlan] = useState<{
@@ -41,29 +52,15 @@ export function PricingPlans() {
     cycle: "MONTHLY"
   } | null>(null)
 
-  const assessoriaPrices = {
-    mensal: { price: 220, total: 220, installments: 1, savings: null, description: "Cobrança mensal recorrente" },
-    semestral: { price: 200, total: 1200, installments: 6, savings: "R$ 120 de economia", description: "6x R$ 200,00 sem juros" },
-    anual: { price: 180, total: 2160, installments: 12, savings: "R$ 480 de economia", description: "12x R$ 180,00 sem juros" },
-  }
-
-  const handleSubscribe = (planName: string, period: "mensal" | "semestral" | "anual") => {
+  const handleSubscribe = (plan: (typeof pricingPlans)[0]) => {
     setIsPasswordOpen(true)
 
-    const periodLabels = {
-      mensal: "Mensal",
-      semestral: "Semestral",
-      anual: "Anual",
-    }
-
-    const priceData = assessoriaPrices[period]
-
     setSelectedPlan({
-      name: planName,
-      period: periodLabels[period],
-      price: priceData.price,
-      totalPrice: priceData.total,
-      installments: priceData.installments,
+      name: `Somma Assessoria - ${plan.name}`,
+      period: plan.name,
+      price: plan.price,
+      totalPrice: plan.total || plan.price,
+      installments: plan.installments || 1,
       cycle: "MONTHLY",
     })
   }
@@ -73,113 +70,143 @@ export function PricingPlans() {
     setIsCheckoutOpen(true)
   }
 
-  const renderBenefitValue = (value: boolean | string) => {
-    if (typeof value === "boolean") {
-      return value ? (
-        <Check className="w-4 h-4 sm:w-5 sm:h-5 text-[#ff4f2d] mx-auto" />
-      ) : (
-        <X className="w-4 h-4 sm:w-5 sm:h-5 text-white/20 mx-auto" />
-      )
-    }
-    return <span className="text-xs md:text-sm text-white/70 text-center block">{value}</span>
-  }
-
   return (
-    <div className="space-y-12">
-      {/* Plan Card */}
-      <div className="relative border border-white/10 bg-white/5 p-6 sm:p-8 md:p-12">
-        <div className="mb-8">
-          <h3 className="text-2xl sm:text-3xl md:text-4xl font-light text-white mb-2">Somma Assessoria</h3>
-          <p className="text-xs sm:text-sm text-white/60">
-            Treinamento completo e acompanhamento personalizado
-          </p>
-        </div>
+    <div className="space-y-20 md:space-y-32">
+      {/* Benefits Checklist */}
+      <div>
+        <h3 className="text-2xl sm:text-3xl md:text-4xl font-light text-white mb-12 md:mb-16">
+          Tudo que você recebe
+        </h3>
 
-        {/* Period Selector */}
-        <div className="flex gap-2 mb-8 bg-white/5 p-1 border border-white/10">
-          {(["mensal", "semestral", "anual"] as const).map((period) => (
-            <button
-              key={period}
-              onClick={() => setAssessoriaPeriod(period)}
-              className={`flex-1 py-2 px-3 text-xs sm:text-sm font-light transition-colors ${
-                assessoriaPeriod === period ? "bg-[#ff4f2d] text-black" : "text-white/60 hover:text-white"
-              }`}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
+          {benefits.map((section, idx) => (
+            <div key={idx}>
+              <h4 className="text-xs sm:text-sm font-light text-white/60 mb-6 uppercase tracking-wider">
+                {section.category}
+              </h4>
+              <ul className="space-y-4 md:space-y-5">
+                {section.items.map((item, itemIdx) => (
+                  <li key={itemIdx} className="flex items-start gap-3 md:gap-4">
+                    <div className="flex-shrink-0 mt-1">
+                      <Check className="w-5 h-5 md:w-6 md:h-6 text-[#ff4f2d]" strokeWidth={1.5} />
+                    </div>
+                    <span className="text-sm md:text-base font-light text-white/80">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Pricing Plans */}
+      <div>
+        <h3 className="text-2xl sm:text-3xl md:text-4xl font-light text-white mb-12 md:mb-16">
+          Escolha seu plano
+        </h3>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+          {pricingPlans.map((plan, idx) => (
+            <div
+              key={idx}
+              className="relative border border-white/10 bg-white/[0.02] p-8 md:p-10 hover:bg-white/[0.05] transition-colors"
             >
-              {period.charAt(0).toUpperCase() + period.slice(1)}
-            </button>
+              {/* Badge Popular */}
+              {idx === 1 && (
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                  <span className="px-3 py-1 text-xs font-light text-black bg-[#ff4f2d] uppercase tracking-wider">
+                    Popular
+                  </span>
+                </div>
+              )}
+
+              {/* Plan Name */}
+              <div className="mb-8">
+                <h4 className="text-lg md:text-xl font-light text-white mb-1">{plan.name}</h4>
+                <p className="text-xs text-white/50 uppercase tracking-wider">{plan.period}</p>
+              </div>
+
+              {/* Price */}
+              <div className="mb-8 pb-8 border-b border-white/10">
+                <div className="flex items-baseline gap-2 mb-3">
+                  <span className="text-4xl md:text-5xl font-light text-white">
+                    R$ {plan.price}
+                  </span>
+                  <span className="text-white/60 text-sm">/mês</span>
+                </div>
+
+                {plan.total && (
+                  <div className="space-y-1">
+                    <p className="text-xs text-white/60">
+                      Total: <span className="text-white font-light">R$ {plan.total.toLocaleString("pt-BR")}</span>
+                    </p>
+                    <p className="text-xs text-white/60">{plan.description}</p>
+                  </div>
+                )}
+
+                {plan.savings && (
+                  <p className="text-xs text-[#ff4f2d] mt-2 font-light">{plan.savings}</p>
+                )}
+              </div>
+
+              {/* CTA Button */}
+              <button
+                onClick={() => handleSubscribe(plan)}
+                className="w-full py-3 px-4 bg-[#ff4f2d] text-black hover:bg-[#ff6647] transition-colors text-sm font-light uppercase tracking-wider"
+              >
+                Assinar
+              </button>
+            </div>
           ))}
         </div>
 
-        {/* Price Display */}
-        <div className="mb-8 pb-8 border-b border-white/10">
-          <div className="flex items-baseline gap-2 mb-4">
-            <span className="text-4xl sm:text-5xl md:text-6xl font-light text-white">
-              R$ {assessoriaPrices[assessoriaPeriod].price.toFixed(2).replace(".", ",")}
-            </span>
-            <span className="text-white/60 text-sm sm:text-base">/mês</span>
-          </div>
-
-          {assessoriaPeriod !== "mensal" && (
-            <div className="space-y-1">
-              <p className="text-xs sm:text-sm text-white/60">
-                Total: <span className="text-white font-light">R$ {assessoriaPrices[assessoriaPeriod].total.toFixed(2).replace(".", ",")}</span>
-              </p>
-              <p className="text-xs text-[#ff4f2d]">
-                {assessoriaPrices[assessoriaPeriod].description}
-              </p>
-            </div>
-          )}
-
-          {assessoriaPeriod === "mensal" && (
-            <p className="text-xs text-white/50 mt-2">
-              {assessoriaPrices[assessoriaPeriod].description}
-            </p>
-          )}
-
-          {assessoriaPrices[assessoriaPeriod].savings && (
-            <p className="text-xs text-[#ff4f2d] mt-2">
-              {assessoriaPrices[assessoriaPeriod].savings}
-            </p>
-          )}
-        </div>
-
-        <button
-          onClick={() => handleSubscribe("Somma Assessoria", assessoriaPeriod)}
-          className="w-full py-3 md:py-4 px-4 bg-[#ff4f2d] text-black hover:bg-[#ff6647] transition-colors text-sm sm:text-base font-light"
-        >
-          Assinar Agora
-        </button>
+        <p className="text-center text-xs text-white/50 mt-8 md:mt-12 font-light">
+          Cancele quando quiser. Sem compromisso de longo prazo.
+        </p>
       </div>
 
-      {/* Benefits Table */}
-      <div className="overflow-x-auto">
-        <div className="inline-block min-w-full">
-          <div className="border border-white/10 divide-y divide-white/10">
-            <div className="grid grid-cols-[2fr_1fr] bg-white/5">
-              <div className="px-4 sm:px-6 py-4 text-xs sm:text-sm font-light text-white">Benefícios</div>
-              <div className="px-4 sm:px-6 py-4 text-xs sm:text-sm font-light text-white text-center">Incluído</div>
-            </div>
+      {/* Comparison Table */}
+      <div>
+        <h3 className="text-2xl sm:text-3xl md:text-4xl font-light text-white mb-12 md:mb-16">
+          Comparativa detalhada
+        </h3>
 
-            {benefits.map((benefit, index) => (
-              <div key={index} className="grid grid-cols-[2fr_1fr] hover:bg-white/[0.02] transition-colors">
-                <div className="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-white/70 font-light">
-                  {benefit.link ? (
-                    <a href={benefit.link} target="_blank" rel="noopener noreferrer" className="hover:text-[#ff4f2d] transition-colors underline">
-                      {benefit.name}
-                    </a>
-                  ) : (
-                    <span>{benefit.name}</span>
-                  )}
-                </div>
-                <div className="px-4 sm:px-6 py-3 sm:py-4 text-center">
-                  {renderBenefitValue(benefit.assessoria)}
-                </div>
-              </div>
-            ))}
-          </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm md:text-base">
+            <thead>
+              <tr className="border-b border-white/10">
+                <th className="text-left py-4 md:py-6 px-4 md:px-6 font-light text-white/80 uppercase text-xs tracking-wider">
+                  Recurso
+                </th>
+                <th className="text-center py-4 md:py-6 px-4 md:px-6 font-light text-white/80 uppercase text-xs tracking-wider">
+                  Incluído
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {benefits.map((section, secIdx) => (
+                <tr key={`section-${secIdx}`} className="border-b border-white/5">
+                  <td colSpan={2} className="py-6 md:py-8 px-4 md:px-6">
+                    <p className="text-xs text-white/60 uppercase tracking-wider font-light mb-4">
+                      {section.category}
+                    </p>
+                    <div className="space-y-3">
+                      {section.items.map((item, itemIdx) => (
+                        <div key={`item-${itemIdx}`} className="grid grid-cols-[1fr_auto] gap-4 items-start">
+                          <span className="text-white/70 font-light">{item}</span>
+                          <Check className="w-4 h-4 md:w-5 md:h-5 text-[#ff4f2d] flex-shrink-0 mt-0.5" strokeWidth={1.5} />
+                        </div>
+                      ))}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
 
+      {/* Modals */}
       {selectedPlan && (
         <>
           <PasswordProtectionModal

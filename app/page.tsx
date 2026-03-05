@@ -194,25 +194,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Benefícios */}
-      <section id="beneficios" className="border-b border-white/10 py-20 md:py-32">
+      {/* Benefícios & Planos */}
+      <section id="beneficios" className="py-20 md:py-32">
         <div className="container mx-auto px-4 sm:px-6 lg:px-12">
-          <h2 className="text-sm font-light text-white/60 mb-8 uppercase tracking-wider">BENEFÍCIOS</h2>
-          <h3 className="text-3xl sm:text-4xl md:text-5xl font-light mb-12">
-            O que está incluído
-          </h3>
+          <h2 className="text-sm font-light text-white/60 mb-8 uppercase tracking-wider">ASSESSORIA SOMMA</h2>
 
           <PricingPlans />
-        </div>
-      </section>
-
-      {/* Planos */}
-      <section className="py-20 md:py-32">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-12">
-          <h2 className="text-sm font-light text-white/60 mb-8 uppercase tracking-wider">PLANOS</h2>
-          <h3 className="text-3xl sm:text-4xl md:text-5xl font-light mb-12">
-            Escolha seu plano
-          </h3>
         </div>
       </section>
     </main>
