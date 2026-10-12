@@ -21,8 +21,11 @@ export function LoginForm({ fromPath, initialError }: { fromPath?: string; initi
     setError(null)
     startTransition(async () => {
       const supabase = createClient()
+      // Limpa refresh token inválido/stale antes do login (evita AuthApiError no middleware)
+      await supabase.auth.signOut({ scope: "local" }).catch(() => {})
+
       const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
-        email,
+        email: email.trim().toLowerCase(),
         password,
       })
 
