@@ -5,8 +5,12 @@ import { PricingPlans } from "@/components/pricing-plans"
 import { Navbar } from "@/components/navbar"
 import { FAQSection } from "@/components/faq-section"
 import Link from "next/link"
+import { AssessoriaForaDoAr } from "@/components/assessoria-fora-do-ar"
+import { ASSESSORIA_VENDAS_ABERTAS } from "@/lib/assessoria-status"
 
 export default function Home() {
+  if (!ASSESSORIA_VENDAS_ABERTAS) return <AssessoriaForaDoAr />
+
   return (
     <main className="bg-black text-white overflow-hidden">
       <Navbar />

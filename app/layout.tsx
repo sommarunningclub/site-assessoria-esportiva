@@ -7,6 +7,7 @@ import { Footer } from "@/components/footer"
 import { CookieBanner } from "@/components/cookie-banner"
 import { PageLoader } from "@/components/page-loader"
 import "./globals.css"
+import { ASSESSORIA_VENDAS_ABERTAS } from "@/lib/assessoria-status"
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" })
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" })
@@ -231,11 +232,11 @@ export const metadata: Metadata = {
   },
 
   robots: {
-    index: true,
-    follow: true,
+    index: ASSESSORIA_VENDAS_ABERTAS,
+    follow: ASSESSORIA_VENDAS_ABERTAS,
     googleBot: {
-      index: true,
-      follow: true,
+      index: ASSESSORIA_VENDAS_ABERTAS,
+      follow: ASSESSORIA_VENDAS_ABERTAS,
       "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
