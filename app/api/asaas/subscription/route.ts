@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
+import { ASSESSORIA_VENDAS_ABERTAS, respostaVendasFechadas } from "@/lib/assessoria-status"
 
 const ASAAS_API_URL = "https://api.asaas.com/v3"
 const ASAAS_API_KEY = process.env.ASAAS_API_KEY
@@ -15,6 +16,7 @@ function friendlyError(data: any): string {
 }
 
 export async function POST(request: NextRequest) {
+  if (!ASSESSORIA_VENDAS_ABERTAS) return respostaVendasFechadas()
   try {
     const body = await request.json()
     const {
